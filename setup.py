@@ -6,8 +6,8 @@ DISTNAME            = 'scikit-umfpack'
 DESCRIPTION         = 'Python interface to UMFPACK sparse direct solver.'
 with open('README') as fd:
     LONG_DESCRIPTION = fd.read()
-MAINTAINER          = 'Robert Cimrman',
-MAINTAINER_EMAIL    = 'cimrman3@ntc.zcu.cz',
+MAINTAINER          = 'Robert Cimrman'
+MAINTAINER_EMAIL    = 'cimrman3@ntc.zcu.cz'
 URL                 = 'https://github.com/rc/scikit-umfpack'
 LICENSE             = 'BSD'
 DOWNLOAD_URL        = URL
