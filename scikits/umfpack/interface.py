@@ -1,3 +1,21 @@
+"""
+Easy-to-use UMFPACK interface
+=============================
+
+.. currentmodule:: scikits.umfpack
+
+The following functions can be used for LU decompositions and solving
+equation systems:
+
+.. autosummary::
+   :toctree: reference/
+
+   spsolve
+   splu
+   UmfpackLU
+
+"""
+
 from __future__ import division, print_function, absolute_import
 
 from warnings import warn
@@ -7,6 +25,8 @@ from scipy.sparse import (isspmatrix_csc, isspmatrix_csr, isspmatrix,
                           SparseEfficiencyWarning, csc_matrix)
 
 from .umfpack import UmfpackContext, UMFPACK_A
+
+__all__ = ['spsolve', 'splu', 'UmfpackLU']
 
 
 def spsolve(A, b):
@@ -168,6 +188,20 @@ class UmfpackLU(object):
         self._R = None
 
     def solve(self, b):
+        """
+        Solve linear equation A x = b for x
+
+        Parameters
+        ----------
+        b : ndarray
+            Right-hand side of the matrix equation. Can be vector or a matrix.
+
+        Returns
+        -------
+        x : ndarray
+            Solution to the matrix equation
+
+        """
         if isspmatrix(b):
             b = b.toarray()
 
@@ -247,3 +281,10 @@ class UmfpackLU(object):
         """
         self._compute_lu()
         return self._P
+
+    @property
+    def nnz(self):
+        """
+        Combined number of nonzeros in L and U: L.nnz + U.nnz
+        """
+        return self._L.nnz + self._U.nnz

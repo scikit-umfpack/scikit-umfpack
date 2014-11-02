@@ -1,9 +1,123 @@
 """
-Interface to the UMFPACK library.
+Low-level interface to UMFPACK
+==============================
 
---
-Author: Robert Cimrman
+
+Routines for symbolic and numeric LU factorization of sparse
+matrices and for solving systems of linear equations with sparse matrices.
+
+Tested with UMFPACK V4.4 (Jan. 28, 2005), V5.0 (May 5, 2006)
+Copyright (c) 2005 by Timothy A. Davis.  All Rights Reserved.
+UMFPACK homepage: http://www.cise.ufl.edu/research/sparse/umfpack
+
+Use 'print UmfpackContext().funs' to see all UMFPACK library functions the
+module exposes, if you need something not covered by the examples below.
+
+
+Module contents
+---------------
+
+.. autosummary::
+   :toctree: reference/
+
+   UmfpackContext
+
+Examples
+--------
+
+Assuming:
+
+- Sparse matrix in CSR or CSC format: mtx
+- Right hand side: rhs
+- Solution: sol
+
+::
+
+    import scikits.umfpack as um
+
+    # Contruct the solver.
+    umfpack = um.UmfpackContext() # Use default 'di' family of UMFPACK routines.
+
+    # One-shot solution.
+    sol = umfpack( um.UMFPACK_A, mtx, rhs, autoTranspose = True )
+    # same as:
+    sol = umfpack.linsolve( um.UMFPACK_A, mtx, rhs, autoTranspose = True )
+
+-or-
+
+::
+
+    # Make LU decomposition.
+    umfpack.numeric( mtx )
+    ...
+    # Use already LU-decomposed matrix.
+    sol1 = umfpack( um.UMFPACK_A, mtx, rhs1, autoTranspose = True )
+    sol2 = umfpack( um.UMFPACK_A, mtx, rhs2, autoTranspose = True )
+    # same as:
+    sol1 = umfpack.solve( um.UMFPACK_A, mtx, rhs1, autoTranspose = True )
+    sol2 = umfpack.solve( um.UMFPACK_A, mtx, rhs2, autoTranspose = True )
+
+-or-
+
+::
+
+    # Make symbolic decomposition.
+    umfpack.symbolic( mtx0 )
+    # Print statistics.
+    umfpack.report_symbolic()
+
+    # ...
+
+    # Make LU decomposition of mtx1 which has same structure as mtx0.
+    umfpack.numeric( mtx1 )
+    # Print statistics.
+    umfpack.report_numeric()
+
+    # Use already LU-decomposed matrix.
+    sol1 = umfpack( um.UMFPACK_A, mtx1, rhs1, autoTranspose = True )
+
+    # ...
+
+    # Make LU decomposition of mtx2 which has same structure as mtx0.
+    umfpack.numeric( mtx2 )
+    sol2 = umfpack.solve( um.UMFPACK_A, mtx2, rhs2, autoTranspose = True )
+
+    # Print all statistics.
+    umfpack.report_info()
+
+-or-
+
+::
+
+    # Get LU factors and permutation matrices of a matrix.
+    L, U, P, Q, R, do_recip = umfpack.lu( mtx )
+
+For a given matrix A, the decomposition satisfies::
+
+    LU = PRAQ           when do_recip is true,
+    LU = P(R^{-1})AQ    when do_recip is false
+
+
+Setting control parameters
+--------------------------
+
+List of control parameter names is accessible as 'um.umfControls' - their
+meaning and possible values are described in the UMFPACK documentation.
+To each name corresponds an attribute of the 'um' module, such as,
+for example 'um.UMFPACK_PRL' (controlling the verbosity of umfpack report
+functions).  These attributes are in fact indices into the control array
+- to set the corresponding control array value, just do the following:
+
+::
+
+    umfpack = um.UmfpackContext()
+    umfpack.control[um.UMFPACK_PRL] = 4 # Let's be more verbose.
+
 """
+
+# Interface to the UMFPACK library.
+# 
+# Author: Robert Cimrman
 
 from __future__ import division, print_function, absolute_import
 
@@ -260,6 +374,33 @@ class Struct(object):
 
 
 class UmfpackContext(Struct):
+    """
+    UMFPACK solver context
+
+    Methods
+    -------
+    __call__
+    solve
+    linsolve
+    lu
+    numeric
+    symbolic
+    free
+    free_numeric
+    free_symbolic
+    report_symbolic
+    report_numeric
+    report_control
+    report_info
+
+    Parameters
+    ----------
+    family : {'di', 'dl', 'zi', 'zl'}
+        Family of UMFPACK functions 
+    maxCond : float, optional
+        If estimated condition number is greater than maxCond,
+        a warning is issued (default: 1e12)
+    """
 
     ##
     # 30.11.2005, c
@@ -267,15 +408,6 @@ class UmfpackContext(Struct):
     # 21.12.2005
     # 01.03.2006
     def __init__(self, family='di', **kwargs):
-        """
-        Arguments:
-
-        family  .. family of UMFPACK functions ('di', 'dl', 'zi', 'zl')
-
-        Keyword arguments:
-
-        maxCond .. if extimated condition number is greater than maxCond,
-                   a warning is issued (default: 1e12)"""
         self.maxCond = 1e12
         Struct.__init__(self, **kwargs)
 
@@ -360,8 +492,10 @@ class UmfpackContext(Struct):
     # 30.11.2005, c
     # last revision: 10.01.2007
     def symbolic(self, mtx):
-        """Symbolic object (symbolic LU decomposition) computation for a given
-        sparsity pattern."""
+        """
+        Perform symbolic object (symbolic LU decomposition) computation for a given
+        sparsity pattern.
+        """
         self.free_symbolic()
 
         indx = self._getIndx(mtx)
@@ -395,9 +529,11 @@ class UmfpackContext(Struct):
     # 02.12.2005
     # 01.03.2006
     def numeric(self, mtx):
-        """Numeric object (LU decomposition) computation using the
+        """
+        Perform numeric object (LU decomposition) computation using the
         symbolic decomposition. The symbolic decomposition is (re)computed
-        if necessary."""
+        if necessary.
+        """
 
         self.free_numeric()
 
@@ -442,15 +578,19 @@ class UmfpackContext(Struct):
     ##
     # 14.12.2005, c
     def report_symbolic(self):
-        """Print information about the symbolic object. Output depends on
-        self.control[UMFPACK_PRL]."""
+        """
+        Print information about the symbolic object. Output depends on
+        self.control[UMFPACK_PRL].
+        """
         self.funs.report_symbolic(self._symbolic, self.control)
 
     ##
     # 14.12.2005, c
     def report_numeric(self):
-        """Print information about the numeric object. Output depends on
-        self.control[UMFPACK_PRL]."""
+        """
+        Print information about the numeric object. Output depends on
+        self.control[UMFPACK_PRL].
+        """
         self.funs.report_numeric(self._numeric, self.control)
 
     ##
@@ -462,14 +602,17 @@ class UmfpackContext(Struct):
     ##
     # 14.12.2005, c
     def report_info(self):
-        """Print all status information. Output depends on
-        self.control[UMFPACK_PRL]."""
+        """
+        Print all status information. Output depends on
+        self.control[UMFPACK_PRL].
+        """
         self.funs.report_info(self.control, self.info)
 
     ##
     # 30.11.2005, c
     # 01.12.2005
     def free_symbolic(self):
+        """Free symbolic data"""
         if self._symbolic is not None:
             self.funs.free_symbolic(self._symbolic)
             self._symbolic = None
@@ -479,6 +622,7 @@ class UmfpackContext(Struct):
     # 30.11.2005, c
     # 01.12.2005
     def free_numeric(self):
+        """Free numeric data"""
         if self._numeric is not None:
             self.funs.free_numeric(self._numeric)
             self._numeric = None
@@ -487,6 +631,7 @@ class UmfpackContext(Struct):
     ##
     # 30.11.2005, c
     def free(self):
+        """Free all data"""
         self.free_symbolic()
         self.free_numeric()
 
@@ -500,15 +645,24 @@ class UmfpackContext(Struct):
         """
         Solution of system of linear equation using the Numeric object.
 
-        Arguments:
-                sys - one of UMFPACK system description constants, like
-                      UMFPACK_A, UMFPACK_At, see umfSys list and UMFPACK
-                      docs
-                mtx - sparse matrix (CSR or CSC)
-                rhs - right hand side vector
-                autoTranspose - automatically changes 'sys' to the
-                      transposed type, if 'mtx' is in CSR, since UMFPACK
-                      assumes CSC internally
+        Parameters
+        ----------
+        sys : constant
+            one of UMFPACK system description constants, like
+            UMFPACK_A, UMFPACK_At, see umfSys list and UMFPACK docs
+        mtx : scipy.sparse.csc_matrix or scipy.sparse.csr_matrix
+            Input.
+        rhs : ndarray
+            Right Hand Side
+        autoTranspose : bool
+            Automatically changes `sys` to the transposed type, if `mtx` is in CSR,
+            since UMFPACK assumes CSC internally
+
+        Returns
+        -------
+        sol : ndarray
+            Solution to the equation system.
+
         """
         if sys not in umfSys:
             raise ValueError('sys must be in' % umfSys)
@@ -575,15 +729,23 @@ class UmfpackContext(Struct):
         One-shot solution of system of linear equation. Reuses Numeric object
         if possible.
 
-        Arguments:
-                sys - one of UMFPACK system description constants, like
-                      UMFPACK_A, UMFPACK_At, see umfSys list and UMFPACK
-                      docs
-                mtx - sparse matrix (CSR or CSC)
-                rhs - right hand side vector
-                autoTranspose - automatically changes 'sys' to the
-                      transposed type, if 'mtx' is in CSR, since UMFPACK
-                      assumes CSC internally
+        Parameters
+        ----------
+        sys : constant
+            one of UMFPACK system description constants, like
+            UMFPACK_A, UMFPACK_At, see umfSys list and UMFPACK docs
+        mtx : scipy.sparse.csc_matrix or scipy.sparse.csr_matrix
+            Input.
+        rhs : ndarray
+            Right Hand Side
+        autoTranspose : bool
+            Automatically changes `sys` to the transposed type, if `mtx` is in CSR,
+            since UMFPACK assumes CSC internally
+
+        Returns
+        -------
+        sol : ndarray
+            Solution to the equation system.
         """
 
         if sys not in umfSys:
@@ -608,15 +770,24 @@ class UmfpackContext(Struct):
         Uses solve() or linsolve() depending on the presence of the Numeric
         object.
 
-        Arguments:
-                sys - one of UMFPACK system description constants, like
-                      UMFPACK_A, UMFPACK_At, see umfSys list and UMFPACK
-                      docs
-                mtx - sparse matrix (CSR or CSC)
-                rhs - right hand side vector
-                autoTranspose - automatically changes 'sys' to the
-                      transposed type, if 'mtx' is in CSR, since UMFPACK
-                      assumes CSC internally
+        Parameters
+        ----------
+        sys : constant
+            one of UMFPACK system description constants, like
+            UMFPACK_A, UMFPACK_At, see umfSys list and UMFPACK docs
+        mtx : scipy.sparse.csc_matrix or scipy.sparse.csr_matrix
+            Input.
+        rhs : ndarray
+            Right Hand Side
+        autoTranspose : bool
+            Automatically changes `sys` to the transposed type, if `mtx` is in CSR,
+            since UMFPACK assumes CSC internally
+
+        Returns
+        -------
+        sol : ndarray
+            Solution to the equation system.
+
         """
 
         if self._numeric is not None:
@@ -628,19 +799,33 @@ class UmfpackContext(Struct):
     # 21.09.2006, added by Nathan Bell
     def lu(self, mtx):
         """
-        Returns an LU decomposition of an m-by-n matrix in the form
-        (L, U, P, Q, R, do_recip):
+        Perform LU decomposition.
 
-            L - Lower triangular m-by-min(m,n) CSR matrix
-            U - Upper triangular min(m,n)-by-n CSC matrix
-            P - Vector of row permuations
-            Q - Vector of column permuations
-            R - Vector of diagonal row scalings
-            do_recip - boolean
+        For a given matrix A, the decomposition satisfies::
 
-        For a given matrix A, the decomposition satisfies:
                 LU = PRAQ        when do_recip is true
                 LU = P(R^-1)AQ   when do_recip is false
+
+        Parameters
+        ----------
+        mtx : scipy.sparse.csc_matrix or scipy.sparse.csr_matrix
+            Input.
+
+        Returns
+        -------
+        L : csr_matrix
+            Lower triangular m-by-min(m,n) CSR matrix
+        U : csc_matrix
+            Upper triangular min(m,n)-by-n CSC matrix
+        P : ndarray
+            Vector of row permutations
+        Q : ndarray
+            Vector of column permutations
+        R : ndarray
+            Vector of diagonal row scalings
+        do_recip : bool
+            Whether R is R^-1 or R
+
         """
 
         # this should probably be changed
