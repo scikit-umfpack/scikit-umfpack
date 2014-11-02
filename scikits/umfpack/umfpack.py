@@ -14,10 +14,8 @@ from scipy.lib.six import iteritems
 
 import numpy as np
 import scipy.sparse as sp
-try:  # Silence import error.
-    from . import _umfpack as _um
-except:
-    _um = None
+
+from . import _umfpack as _um
 
 assumeSortedIndices = False
 
@@ -278,11 +276,6 @@ class UmfpackContext(Struct):
 
         maxCond .. if extimated condition number is greater than maxCond,
                    a warning is issued (default: 1e12)"""
-        if _um is None:
-            raise ImportError('Scipy was built without UMFPACK support. '
-                              'You need to install the UMFPACK library and '
-                              'header files before building scipy.')
-
         self.maxCond = 1e12
         Struct.__init__(self, **kwargs)
 
@@ -307,8 +300,7 @@ class UmfpackContext(Struct):
         self.control[UMFPACK_PRL] = 3
 
     def __del__(self):
-        if _um is not None:
-            self.free()
+        self.free()
 
     ##
     # 30.11.2005, c
