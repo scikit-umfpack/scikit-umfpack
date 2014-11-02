@@ -86,6 +86,11 @@ class UmfpackLU(object):
 
         Pr * (R^-1) * A * Pc = L * U
 
+    Parameters
+    ----------
+    A : csc_matrix or csr_matrix
+        Matrix to decompose
+
     Attributes
     ----------
     shape
