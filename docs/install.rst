@@ -1,5 +1,5 @@
-Install
-=======
+Installation
+============
 
 This package uses distutils, which is the default way of installing python
 modules. In the directory scikit-umfpack (the same as the file you are reading
