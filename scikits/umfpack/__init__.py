@@ -174,6 +174,7 @@ functions).  These attributes are in fact indices into the control array
 from __future__ import division, print_function, absolute_import
 
 from .umfpack import *
+from .interface import spsolve, splu
 
 __all__ = [s for s in dir() if not s.startswith('_')]
 from numpy.testing import Tester
