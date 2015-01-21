@@ -17,8 +17,9 @@ import numpy as np
 import sys
 
 import scipy.sparse as sp
-import scipy.sparse.linalg.dsolve.umfpack as um
 import scipy.linalg as nla
+
+import scikits.umfpack as um
 
 defaultURL = 'http://www.cise.ufl.edu/research/sparse/HBformat/'
 
