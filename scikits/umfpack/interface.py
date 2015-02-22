@@ -111,12 +111,12 @@ class UmfpackLU(object):
 
     >>> import numpy as np
     >>> from scipy.sparse import csc_matrix
-    >>> from scikits.umfpack import splu
+    >>> from scikits import umfpack
     >>> A = csc_matrix([[1,2,0,4],[1,0,0,1],[1,0,2,1],[2,2,1,0.]])
 
     This can be solved for a given right-hand side:
 
-    >>> lu = splu(A)
+    >>> lu = umfpack.splu(A)
     >>> b = np.array([1, 2, 3, 4])
     >>> x = lu.solve(b)
     >>> A.dot(x)
