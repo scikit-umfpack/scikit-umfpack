@@ -8,7 +8,7 @@ with open('README') as fd:
     LONG_DESCRIPTION = fd.read()
 MAINTAINER          = 'Robert Cimrman'
 MAINTAINER_EMAIL    = 'cimrman3@ntc.zcu.cz'
-URL                 = 'https://github.com/rc/scikit-umfpack'
+URL                 = 'https://rc.github.io/scikit-umfpack'
 LICENSE             = 'BSD'
 DOWNLOAD_URL        = URL
 VERSION             = '0.1'
