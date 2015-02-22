@@ -4,6 +4,9 @@ Development
 Code
 ----
 
+``scikits.umfpack`` development is done on Github at
+https://github.com/rc/scikit-umfpack
+
 You can check the latest sources with the command::
 
   git clone https://github.com/rc/scikit-umfpack.git
