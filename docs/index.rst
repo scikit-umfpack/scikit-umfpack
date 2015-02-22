@@ -12,6 +12,12 @@ Usage:
 Installing scikits.umfpack also enables using UMFPACK solver via some
 of the scipy.sparse.linalg functions, for SciPy >= 0.14.0.
 
+You can obtain scikit-umfpack from
+
+- https://pypi.python.org/pypi/scikit-umfpack (releases)
+
+- https://github.com/rc/scikit-umfpack (development version)
+
 Contents:
 
 .. toctree::
