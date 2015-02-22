@@ -67,10 +67,12 @@ class TestSolvers(object):
 
         lu = um.splu(A)
 
-        Pr = csc_matrix((4, 4))
+        Pr = np.zeros((4, 4))
         Pr[lu.perm_r, np.arange(4)] = 1
-        Pc = csc_matrix((4, 4))
+        Pr = csc_matrix(Pr)
+        Pc = np.zeros((4, 4))
         Pc[np.arange(4), lu.perm_c] = 1
+        Pc = csc_matrix(Pc)
 
         R = csc_matrix((4, 4))
         R.setdiag(lu.R)
