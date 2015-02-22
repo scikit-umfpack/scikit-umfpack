@@ -124,8 +124,6 @@ from __future__ import division, print_function, absolute_import
 import re
 import warnings
 
-from scipy.lib.six import iteritems
-
 import numpy as np
 import scipy.sparse as sp
 
@@ -360,7 +358,7 @@ class Struct(object):
     # 08.03.2005
     def __str__(self):
         ss = "%s\n" % self.__class__
-        for key, val in iteritems(self.__dict__):
+        for key, val in self.__dict__.items():
             if (issubclass(self.__dict__[key].__class__, Struct)):
                 ss += "  %s:\n    %s\n" % (key, self.__dict__[key].__class__)
             else:
