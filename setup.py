@@ -16,6 +16,7 @@ VERSION             = '0.1'
 import sys
 import os
 import shutil
+import subprocess
 from distutils.command.clean import clean as Clean
 
 ###############################################################################
@@ -80,7 +81,14 @@ def configuration(parent_package='', top_path=None):
 def setup_package():
     cmdclass = {'clean': CleanCommand}
     try:
-        from sphinx.setup_command import BuildDoc
+        from sphinx.setup_command import BuildDoc as SphinxBuildDoc
+        class BuildDoc(SphinxBuildDoc):
+            """Run in-place build before Sphinx doc build"""
+            def run(self):
+                ret = subprocess.call([sys.executable, sys.argv[0], 'build_ext', '-i'])
+                if ret != 0:
+                    raise RuntimeError("Building Scipy failed!")
+                SphinxBuildDoc.run(self)
         cmdclass['build_sphinx'] = BuildDoc
     except ImportError:
         pass
