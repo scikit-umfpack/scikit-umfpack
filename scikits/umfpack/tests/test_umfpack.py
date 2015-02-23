@@ -17,42 +17,26 @@ from scipy import rand, matrix, diag, eye
 from scipy.sparse import csc_matrix, spdiags, SparseEfficiencyWarning
 from scipy.sparse.linalg import linsolve
 
-warnings.simplefilter('ignore',SparseEfficiencyWarning)
-
 import numpy as np
 import scikits.umfpack as um
+
 
 class _DeprecationAccept:
     def setUp(self):
         self.mgr = WarningManager()
         self.mgr.__enter__()
         warnings.simplefilter("ignore", DeprecationWarning)
+        warnings.simplefilter('ignore', SparseEfficiencyWarning)
 
     def tearDown(self):
         self.mgr.__exit__()
 
 
-class TestSolvers(_DeprecationAccept):
+class TestScipySolvers(_DeprecationAccept):
     """Tests inverting a sparse linear system"""
 
-    def test_solve_complex_without_umfpack(self):
-        """Solve: single precision complex"""
-        linsolve.use_solver(useUmfpack=False)
-        a = self.a.astype('F')
-        b = self.b.astype('F')
-        x = linsolve.spsolve(a, b)
-        assert_array_almost_equal(a*x, b, decimal=4)
-
-    def test_solve_without_umfpack(self):
-        """Solve: single precision"""
-        linsolve.use_solver(useUmfpack=False)
-        a = self.a.astype('f')
-        b = self.b
-        x = linsolve.spsolve(a, b.astype('f'))
-        assert_array_almost_equal(a*x, b, decimal=4)
-
     def test_solve_complex_umfpack(self):
-        """Solve with UMFPACK: double precision complex"""
+        # Solve with UMFPACK: double precision complex
         linsolve.use_solver(useUmfpack=True)
         a = self.a.astype('D')
         b = self.b
@@ -60,7 +44,7 @@ class TestSolvers(_DeprecationAccept):
         assert_array_almost_equal(a*x, b)
 
     def test_solve_umfpack(self):
-        """Solve with UMFPACK: double precision"""
+        # Solve with UMFPACK: double precision
         linsolve.use_solver(useUmfpack=True)
         a = self.a.astype('d')
         b = self.b
@@ -68,7 +52,7 @@ class TestSolvers(_DeprecationAccept):
         assert_array_almost_equal(a*x, b)
 
     def test_solve_sparse_rhs(self):
-        """Solve with UMFPACK: double precision, sparse rhs"""
+        # Solve with UMFPACK: double precision, sparse rhs
         linsolve.use_solver(useUmfpack=True)
         a = self.a.astype('d')
         b = csc_matrix(self.b).T
@@ -76,7 +60,7 @@ class TestSolvers(_DeprecationAccept):
         assert_array_almost_equal(a*x, self.b)
 
     def test_factorized_umfpack(self):
-        """Prefactorize (with UMFPACK) matrix for solving with multiple rhs"""
+        # Prefactorize (with UMFPACK) matrix for solving with multiple rhs
         linsolve.use_solver(useUmfpack=True)
         a = self.a.astype('d')
         solve = linsolve.factorized(a)
@@ -87,7 +71,7 @@ class TestSolvers(_DeprecationAccept):
         assert_array_almost_equal(a*x2, self.b2)
 
     def test_factorized_without_umfpack(self):
-        """Prefactorize matrix for solving with multiple rhs"""
+        # Prefactorize matrix for solving with multiple rhs
         linsolve.use_solver(useUmfpack=False)
         a = self.a.astype('d')
         solve = linsolve.factorized(a)
@@ -104,11 +88,12 @@ class TestSolvers(_DeprecationAccept):
 
         _DeprecationAccept.setUp(self)
 
+
 class TestFactorization(_DeprecationAccept):
     """Tests factorizing a sparse linear system"""
 
     def test_complex_lu(self):
-        """Getting factors of complex matrix"""
+        # Getting factors of complex matrix
         umfpack = um.UmfpackContext("zi")
 
         for A in self.complex_matrices:
@@ -128,7 +113,7 @@ class TestFactorization(_DeprecationAccept):
             assert_array_almost_equal(P*R*A*Q,L*U)
 
     def test_real_lu(self):
-        """Getting factors of real matrix"""
+        # Getting factors of real matrix
         umfpack = um.UmfpackContext("di")
 
         for A in self.real_matrices:
@@ -166,6 +151,7 @@ class TestFactorization(_DeprecationAccept):
                                  for x in self.real_matrices]
 
         _DeprecationAccept.setUp(self)
+
 
 if __name__ == "__main__":
     run_module_suite()

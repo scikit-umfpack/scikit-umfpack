@@ -1,0 +1,1 @@
+.. automodule:: scikits.umfpack.interface

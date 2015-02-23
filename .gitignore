@@ -1,5 +1,9 @@
-*
-!*/
-!*.py
+*.pyc
+*~
+*.so
 build
 dist
+/docs/_build
+/docs/reference
+/scikits/umfpack/_umfpack.py
+/scikits/umfpack/_umfpack_wrap.c

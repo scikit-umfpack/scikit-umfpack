@@ -8,7 +8,7 @@ with open('README') as fd:
     LONG_DESCRIPTION = fd.read()
 MAINTAINER          = 'Robert Cimrman'
 MAINTAINER_EMAIL    = 'cimrman3@ntc.zcu.cz'
-URL                 = 'https://github.com/rc/scikit-umfpack'
+URL                 = 'https://rc.github.io/scikit-umfpack'
 LICENSE             = 'BSD'
 DOWNLOAD_URL        = URL
 VERSION             = '0.1'
@@ -78,6 +78,13 @@ def configuration(parent_package='', top_path=None):
     return config
 
 def setup_package():
+    cmdclass = {'clean': CleanCommand}
+    try:
+        from sphinx.setup_command import BuildDoc
+        cmdclass['build_sphinx'] = BuildDoc
+    except ImportError:
+        pass
+
     metadata = dict(name=DISTNAME,
                     maintainer=MAINTAINER,
                     maintainer_email=MAINTAINER_EMAIL,
@@ -104,7 +111,7 @@ def setup_package():
                         'Operating System :: MacOS',
                     ],
                     platforms = ['Linux', 'Mac OS-X', 'Windows'],
-                    cmdclass={'clean': CleanCommand},
+                    cmdclass=cmdclass,
                     **extra_setuptools_args)
 
     if (len(sys.argv) >= 2
