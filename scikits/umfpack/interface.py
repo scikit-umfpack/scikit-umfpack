@@ -22,7 +22,7 @@ from warnings import warn
 import numpy as np
 from numpy import asarray, empty, ravel, nonzero
 from scipy.sparse import (isspmatrix_csc, isspmatrix_csr, isspmatrix,
-                          SparseEfficiencyWarning, csc_matrix)
+                          SparseEfficiencyWarning, csc_matrix, hstack)
 
 from .umfpack import UmfpackContext, UMFPACK_A
 
@@ -218,6 +218,28 @@ class UmfpackLU(object):
         for j in range(b_arr.shape[1]):
             x[:,j] = self.umf.solve(UMFPACK_A, self._A, b_arr[:,j], autoTranspose=True)
         return x.reshape((self._A.shape[0],) + b.shape[1:])
+
+    def solve_sparse(self, B):
+        """
+        Solve linear equation of the form A X = B. Where B and X are sparse matrices.
+
+        Parameters
+        ----------
+        B : any scipy.sparse matrix
+            Right-hand side of the matrix equation.
+            Note: it will be converted to csc_matrix via `.tocsc()`.
+
+        Returns
+        -------
+        X : csc_matrix
+            Solution to the matrix equation as a csc_matrix
+        """
+        B = B.tocsc()
+        cols = list()
+        for j in xrange(B.shape[1]):
+            col = self.solve(B[:,j])
+            cols.append(csc_matrix(col))
+        return hstack(cols)
 
     def _compute_lu(self):
         if self._L is None:
