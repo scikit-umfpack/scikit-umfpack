@@ -11,6 +11,11 @@ def configuration(parent_package='',top_path=None):
 
     umf_info = get_info('umfpack', notfound_action=1)
 
+    ## The following addition is needed when linking against a umfpack built
+    ## from the latest SparseSuite. Not (strictly) needed when linking against
+    ## the version in the ubuntu repositories.
+    umf_info['libraries'].insert(0, 'rt')
+
     umfpack_i_file = config.paths('umfpack.i')[0]
 
     def umfpack_i(ext, build_dir):
