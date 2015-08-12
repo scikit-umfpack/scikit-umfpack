@@ -4,7 +4,7 @@ descr = """Python interface to UMFPACK sparse direct solver."""
 
 DISTNAME            = 'scikit-umfpack'
 DESCRIPTION         = 'Python interface to UMFPACK sparse direct solver.'
-with open('README') as fd:
+with open('README.md') as fd:
     LONG_DESCRIPTION = fd.read()
 MAINTAINER          = 'Robert Cimrman'
 MAINTAINER_EMAIL    = 'cimrman3@ntc.zcu.cz'
