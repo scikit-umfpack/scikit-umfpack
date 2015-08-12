@@ -5,9 +5,11 @@ import random
 
 from numpy.testing import assert_allclose, run_module_suite
 from numpy.testing.utils import WarningManager
+from numpy.linalg import norm as dense_norm
 
 from scipy import rand, matrix, diag, eye
 from scipy.sparse import csc_matrix, spdiags, SparseEfficiencyWarning
+from scipy.sparse import hstack
 from scipy.sparse.linalg import linsolve
 
 import numpy as np
@@ -61,6 +63,19 @@ class TestSolvers(object):
         assert_allclose(a*x1, self.b)
         x2 = lu.solve(self.b2)
         assert_allclose(a*x2, self.b2)
+
+    def test_splu_solve_sparse(self):
+        # Prefactorize (with UMFPACK) matrix for solving with multiple rhs
+        A = self.a.astype('d')
+        lu = um.splu(A)
+
+        b = csc_matrix(self.b.reshape(self.b.shape[0], 1))
+        b2 = csc_matrix(self.b2.reshape(self.b2.shape[0], 1))
+        B = hstack((b, b2))
+
+        X = lu.solve_sparse(B)
+        assert dense_norm(((A*X) - B).todense()) < 1e-14
+        assert_allclose((A*X).todense(), B.todense())
 
     def test_splu_lu(self):
         A = csc_matrix([[1,2,0,4],[1,0,0,1],[1,0,2,1],[2,2,1,0.]])
