@@ -31,7 +31,9 @@ SuiteSparse may be available from your package manager or as a prebuilt shared
 library. If that is the case use that if possible. Installation on Ubuntu 14.04
 can be achieved with
 
-    $ sudo apt-get install libsuitesparse-dev
+```
+sudo apt-get install libsuitesparse-dev
+```
 
 Otherwise, you will need to build from source. Unfortunately, SuiteSparse's
 makefiles do not support building a shared library out of the box. You may find
@@ -51,14 +53,17 @@ Install
 
 This package uses distutils, which is the default way of installing python
 modules. In the directory scikit-umfpack (the same as the file you are reading
-now) do::
+now) do:
 
-    $ python setup.py install
+```
+python setup.py install
+```
 
-or for a local installation::
+or for a local installation:
 
-    $ python setup.py install --root=<DIRECTORY>
-
+```
+python setup.py install --root=<DIRECTORY>
+```
 
 Development
 ===========
@@ -66,20 +71,24 @@ Development
 Code
 ----
 
-You can check the latest sources with the command::
+You can check the latest sources with the command:
 
-    $ git clone https://github.com/rc/scikit-umfpack.git
+```
+git clone https://github.com/rc/scikit-umfpack.git
+```
 
-or if you have write privileges::
+or if you have write privileges:
 
-    $ git clone git@github.com:rc/scikit-umfpack.git
-
+```
+git clone git@github.com:rc/scikit-umfpack.git
+```
 
 Testing
 -------
 
 After installation, you can launch the test suite from outside the
-source directory (you will need to have the ``nose`` package installed)::
+source directory (you will need to have the ``nose`` package installed):
 
-    $ nosetests -v scikits.umfpack
-
+```
+nosetests -v scikits.umfpack
+```
