@@ -3,6 +3,8 @@
 *.so
 build
 dist
+tmp
+wheels
 /docs/_build
 /docs/reference
 /scikits/umfpack/_umfpack.py
