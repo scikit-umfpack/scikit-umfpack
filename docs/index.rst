@@ -27,3 +27,4 @@ Contents:
    interface
    umfpack
    develop
+   release
