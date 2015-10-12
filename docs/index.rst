@@ -16,7 +16,7 @@ You can obtain scikit-umfpack from
 
 - https://pypi.python.org/pypi/scikit-umfpack (releases)
 
-- https://github.com/rc/scikit-umfpack (development version)
+- https://github.com/scikit-umfpack/scikit-umfpack (development version)
 
 Contents:
 
