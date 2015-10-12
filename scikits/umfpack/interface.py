@@ -110,6 +110,7 @@ class UmfpackLU(object):
     Methods
     -------
     solve
+    solve_sparse
 
     Examples
     --------
