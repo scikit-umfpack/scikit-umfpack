@@ -102,9 +102,28 @@ def setup_package():
             def run(self):
                 ret = subprocess.call([sys.executable, sys.argv[0], 'build_ext', '-i'])
                 if ret != 0:
-                    raise RuntimeError("Building Scipy failed!")
+                    raise RuntimeError("Building failed!")
                 SphinxBuildDoc.run(self)
         cmdclass['build_sphinx'] = BuildDoc
+    except ImportError:
+        pass
+
+    try:
+        from setuptools.command.test import test as TestCommand
+        class NoseTestCommand(TestCommand):
+            def finalize_options(self):
+                TestCommand.finalize_options(self)
+                self.test_args = []
+                self.test_suite = True
+
+            def run_tests(self):
+                # Run nose ensuring that argv simulates running nosetests directly
+                ret = subprocess.call([sys.executable, sys.argv[0], 'build_ext', '-i'])
+                if ret != 0:
+                    raise RuntimeError("Building failed!")
+                import nose
+                nose.run_exit(argv=['nosetests'])
+        cmdclass['test'] = NoseTestCommand
     except ImportError:
         pass
 
@@ -134,6 +153,7 @@ def setup_package():
                         'Operating System :: MacOS',
                     ],
                     platforms = ['Linux', 'Mac OS-X', 'Windows'],
+                    test_suite='nose.collector',
                     cmdclass=cmdclass,
                     **extra_setuptools_args)
 

@@ -19,6 +19,7 @@ equation systems:
 from __future__ import division, print_function, absolute_import
 
 from warnings import warn
+import sys
 import numpy as np
 from numpy import asarray, empty, ravel, nonzero
 from scipy.sparse import (isspmatrix_csc, isspmatrix_csr, isspmatrix,
@@ -26,7 +27,12 @@ from scipy.sparse import (isspmatrix_csc, isspmatrix_csr, isspmatrix,
 
 from .umfpack import UmfpackContext, UMFPACK_A
 
+
 __all__ = ['spsolve', 'splu', 'UmfpackLU']
+
+
+if sys.version_info[0] >= 3:
+    xrange = range
 
 
 def spsolve(A, b):
