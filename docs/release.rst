@@ -47,7 +47,7 @@ Release Tasks
 #. Bump version number:
 
    - in ``setup.py``
-   - in ``doc/conf.py``
+   - in ``docs/conf.py``
 
 #. Regenerate and review the documentation::
 
@@ -99,7 +99,7 @@ Release Tasks
 
 #. Upload to `pypi`_:
 
-   - Check the version numbers in ``setup.py`` and ``doc/conf.py``
+   - Check the version numbers in ``setup.py`` and ``docs/conf.py``
    - Do::
 
        python setup.py sdist
@@ -109,7 +109,7 @@ Release Tasks
 
 #. Update gh-pages::
 
-     ./doc/do-gh-pages.sh
+     ./docs/do-gh-pages.sh
      git push -f origin gh-pages
 
 #. If wheels are available for the released version, upload them also using
