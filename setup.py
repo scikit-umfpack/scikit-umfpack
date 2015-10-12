@@ -26,7 +26,7 @@ MAINTAINER_EMAIL    = 'cimrman3@ntc.zcu.cz'
 URL                 = 'https://scikit-umfpack.github.io/scikit-umfpack'
 LICENSE             = 'BSD'
 DOWNLOAD_URL        = URL
-VERSION             = '0.2'
+VERSION             = '0.2.1'
 
 import sys
 import os
