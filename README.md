@@ -38,7 +38,7 @@ sudo apt-get install libsuitesparse-dev
 Otherwise, you will need to build from source. Unfortunately, SuiteSparse's
 makefiles do not support building a shared library out of the box. You may find
 [Stefan Fürtinger instructions
-helpful](http://uni-graz.at/people/fuertins/research.html#building-numpy-and-scipy).
+helpful](http://fuertinger.lima-city.de/research.html#building-numpy-and-scipy).
 
 Furthmore, building METIS-4.0, an optional but important compile time
 dependency of SuiteSparse, has problems on newer GCCs. This [patch and
