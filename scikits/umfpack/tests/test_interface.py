@@ -95,3 +95,6 @@ class TestSolvers(object):
         A2 = (R * Pr.T * (lu.L * lu.U) * Pc.T).A
 
         assert_allclose(A2, A.A, atol=1e-13)
+
+if __name__ == "__main__":
+    run_module_suite()
