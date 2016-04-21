@@ -18,6 +18,8 @@
 
 #include <umfpack.h>
 
+typedef long SuiteSparse_long;
+
 %init %{
     import_array();
 %}
@@ -269,6 +271,18 @@ ARRAY_IN( int, int, INT )
     int Q [ ]
 };
 %apply int  *OUTPUT { int *do_recip};
+
+ARRAY_IN( long, long, LONG )
+%apply long *array {
+    long Lp [ ],
+    long Lj [ ],
+    long Up [ ],
+    long Ui [ ],
+    long P [ ],
+    long Q [ ]
+};
+%apply long *OUTPUT { long *do_recip};
+
 %include <umfpack_get_numeric.h>
 
 #endif
