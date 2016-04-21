@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-#
-
 """ Test functions for UMFPACK wrappers
 
 """
