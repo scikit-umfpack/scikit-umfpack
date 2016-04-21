@@ -15,6 +15,12 @@ from scipy.sparse.linalg import linsolve
 import numpy as np
 import scikits.umfpack as um
 
+# Force int64 index dtype even when indices fit into int32.
+def _to_int64(x):
+    y = csc_matrix(x).copy()
+    y.indptr = y.indptr.astype(np.int64)
+    y.indices = y.indices.astype(np.int64)
+    return y
 
 class TestSolvers(object):
     """Tests inverting a sparse linear system"""
@@ -40,9 +46,25 @@ class TestSolvers(object):
         x = um.spsolve(a, b)
         assert_allclose(a*x, b)
 
+    def test_solve_complex_long_umfpack(self):
+        # Solve with UMFPACK: double precision complex, long indices
+        a = _to_int64(self.a.astype('D'))
+
+        b = self.b
+        x = um.spsolve(a, b)
+        assert_allclose(a*x, b)
+
     def test_solve_umfpack(self):
         # Solve with UMFPACK: double precision
         a = self.a.astype('d')
+        b = self.b
+        x = um.spsolve(a, b)
+        assert_allclose(a*x, b)
+
+    def test_solve_long_umfpack(self):
+        # Solve with UMFPACK: double precision, long indices
+        a = _to_int64(self.a.astype('d'))
+
         b = self.b
         x = um.spsolve(a, b)
         assert_allclose(a*x, b)
@@ -57,6 +79,17 @@ class TestSolvers(object):
     def test_splu_solve(self):
         # Prefactorize (with UMFPACK) matrix for solving with multiple rhs
         a = self.a.astype('d')
+        lu = um.splu(a)
+
+        x1 = lu.solve(self.b)
+        assert_allclose(a*x1, self.b)
+        x2 = lu.solve(self.b2)
+        assert_allclose(a*x2, self.b2)
+
+    def test_splu_solve_long(self):
+        # Prefactorize (with UMFPACK) matrix with long indices for solving with
+        # multiple rhs
+        a = _to_int64(self.a.astype('d'))
         lu = um.splu(a)
 
         x1 = lu.solve(self.b)

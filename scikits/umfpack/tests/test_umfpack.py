@@ -17,6 +17,12 @@ from scipy.sparse.linalg import linsolve
 import numpy as np
 import scikits.umfpack as um
 
+# Force int64 index dtype even when indices fit into int32.
+def _to_int64(x):
+    y = csc_matrix(x).copy()
+    y.indptr = y.indptr.astype(np.int64)
+    y.indices = y.indices.astype(np.int64)
+    return y
 
 class _DeprecationAccept:
     def setUp(self):
@@ -40,10 +46,26 @@ class TestScipySolvers(_DeprecationAccept):
         x = linsolve.spsolve(a, b)
         assert_array_almost_equal(a*x, b)
 
+    def test_solve_complex_long_umfpack(self):
+        # Solve with UMFPACK: double precision complex, long indices
+        linsolve.use_solver(useUmfpack=True)
+        a = _to_int64(self.a.astype('D'))
+        b = self.b
+        x = linsolve.spsolve(a, b)
+        assert_array_almost_equal(a*x, b)
+
     def test_solve_umfpack(self):
         # Solve with UMFPACK: double precision
         linsolve.use_solver(useUmfpack=True)
         a = self.a.astype('d')
+        b = self.b
+        x = linsolve.spsolve(a, b)
+        assert_array_almost_equal(a*x, b)
+
+    def test_solve_long_umfpack(self):
+        # Solve with UMFPACK: double precision
+        linsolve.use_solver(useUmfpack=True)
+        a = _to_int64(self.a.astype('d'))
         b = self.b
         x = linsolve.spsolve(a, b)
         assert_array_almost_equal(a*x, b)
@@ -67,6 +89,17 @@ class TestScipySolvers(_DeprecationAccept):
         x2 = solve(self.b2)
         assert_array_almost_equal(a*x2, self.b2)
 
+    def test_factorized_long_umfpack(self):
+        # Prefactorize (with UMFPACK) matrix for solving with multiple rhs
+        linsolve.use_solver(useUmfpack=True)
+        a = _to_int64(self.a.astype('d'))
+        solve = linsolve.factorized(a)
+
+        x1 = solve(self.b)
+        assert_array_almost_equal(a*x1, self.b)
+        x2 = solve(self.b2)
+        assert_array_almost_equal(a*x2, self.b2)
+
     def test_factorized_without_umfpack(self):
         # Prefactorize matrix for solving with multiple rhs
         linsolve.use_solver(useUmfpack=False)
@@ -80,6 +113,7 @@ class TestScipySolvers(_DeprecationAccept):
 
     def setUp(self):
         self.a = spdiags([[1, 2, 3, 4, 5], [6, 5, 8, 9, 10]], [0, 1], 5, 5)
+        self.a2 = _to_int64(self.a)
         self.b = np.array([1, 2, 3, 4, 5], dtype=np.float64)
         self.b2 = np.array([5, 4, 3, 2, 1], dtype=np.float64)
 
@@ -94,6 +128,26 @@ class TestFactorization(_DeprecationAccept):
         umfpack = um.UmfpackContext("zi")
 
         for A in self.complex_matrices:
+            umfpack.numeric(A)
+
+            (L,U,P,Q,R,do_recip) = umfpack.lu(A)
+
+            L = L.todense()
+            U = U.todense()
+            A = A.todense()
+            if not do_recip:
+                R = 1.0/R
+            R = matrix(diag(R))
+            P = eye(A.shape[0])[P,:]
+            Q = eye(A.shape[1])[:,Q]
+
+            assert_array_almost_equal(P*R*A*Q,L*U)
+
+    def test_complex_long_lu(self):
+        # Getting factors of complex matrix with long indices
+        umfpack = um.UmfpackContext("zl")
+
+        for A in self.complex_long_matrices:
             umfpack.numeric(A)
 
             (L,U,P,Q,R,do_recip) = umfpack.lu(A)
@@ -129,23 +183,48 @@ class TestFactorization(_DeprecationAccept):
 
             assert_array_almost_equal(P*R*A*Q,L*U)
 
+    def test_real_long_lu(self):
+        # Getting factors of real matrix with long indices
+        umfpack = um.UmfpackContext("dl")
+
+        for A in self.real_long_matrices:
+            umfpack.numeric(A)
+
+            (L,U,P,Q,R,do_recip) = umfpack.lu(A)
+
+            L = L.todense()
+            U = U.todense()
+            A = A.todense()
+            if not do_recip:
+                R = 1.0/R
+            R = matrix(diag(R))
+            P = eye(A.shape[0])[P,:]
+            Q = eye(A.shape[1])[:,Q]
+
+            assert_array_almost_equal(P*R*A*Q,L*U)
+
     def setUp(self):
         random.seed(0)  # make tests repeatable
-        self.real_matrices = []
-        self.real_matrices.append(spdiags([[1, 2, 3, 4, 5], [6, 5, 8, 9, 10]],
-                                          [0, 1], 5, 5))
-        self.real_matrices.append(spdiags([[1, 2, 3, 4, 5], [6, 5, 8, 9, 10]],
-                                          [0, 1], 4, 5))
-        self.real_matrices.append(spdiags([[1, 2, 3, 4, 5], [6, 5, 8, 9, 10]],
-                                          [0, 2], 5, 5))
-        self.real_matrices.append(rand(3,3))
-        self.real_matrices.append(rand(5,4))
-        self.real_matrices.append(rand(4,5))
+        real_matrices = []
+        real_matrices.append(spdiags([[1, 2, 3, 4, 5], [6, 5, 8, 9, 10]],
+                                     [0, 1], 5, 5))
+        real_matrices.append(spdiags([[1, 2, 3, 4, 5], [6, 5, 8, 9, 10]],
+                                     [0, 1], 4, 5))
+        real_matrices.append(spdiags([[1, 2, 3, 4, 5], [6, 5, 8, 9, 10]],
+                                     [0, 2], 5, 5))
+        real_matrices.append(rand(3,3))
+        real_matrices.append(rand(5,4))
+        real_matrices.append(rand(4,5))
 
-        self.real_matrices = [csc_matrix(x).astype('d') for x
-                in self.real_matrices]
+        self.real_matrices = [csc_matrix(x).astype('d')
+                              for x in real_matrices]
         self.complex_matrices = [x.astype(np.complex128)
                                  for x in self.real_matrices]
+
+        self.real_long_matrices = [_to_int64(x)
+                                   for x in self.real_matrices]
+        self.complex_long_matrices = [_to_int64(x)
+                                      for x in self.complex_matrices]
 
         _DeprecationAccept.setUp(self)
 
