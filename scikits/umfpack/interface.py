@@ -188,8 +188,8 @@ class UmfpackLU(object):
         if A.dtype.char not in 'dD':
             raise ValueError("Only double precision matrices supported")
 
-        family = {'d': 'di', 'D': 'zi'}
-        self.umf = UmfpackContext(family[A.dtype.char])
+        family = {'di': 'di', 'Di': 'zi', 'dl': 'dl', 'Dl': 'zl'}
+        self.umf = UmfpackContext(family[A.dtype.char + A.indices.dtype.char])
         self.umf.numeric(A)
 
         self._A = A
