@@ -10,7 +10,8 @@ def read_as_rst(filename):
         print('warning: pypandoc module not found,'
               ' could not convert to RST!')
 
-        with open(filename) as fd:
+        import codecs
+        with codecs.open(filename, encoding='UTF-8') as fd:
             out = fd.read()
 
     else:
