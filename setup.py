@@ -91,6 +91,7 @@ def configuration(parent_package='', top_path=None):
 
     config.add_subpackage('scikits.umfpack')
     config.add_data_files('scikits/__init__.py')
+    config.add_data_files('MANIFEST.in')
 
     return config
 
@@ -109,24 +110,25 @@ def setup_package():
     except ImportError:
         pass
 
-    try:
-        from setuptools.command.test import test as TestCommand
-        class NoseTestCommand(TestCommand):
-            def finalize_options(self):
-                TestCommand.finalize_options(self)
-                self.test_args = []
-                self.test_suite = True
+    if not 'sdist' in sys.argv[1:]:
+        try:
+            from setuptools.command.test import test as TestCommand
+            class NoseTestCommand(TestCommand):
+                def finalize_options(self):
+                    TestCommand.finalize_options(self)
+                    self.test_args = []
+                    self.test_suite = True
 
-            def run_tests(self):
-                # Run nose ensuring that argv simulates running nosetests directly
-                ret = subprocess.call([sys.executable, sys.argv[0], 'build_ext', '-i'])
-                if ret != 0:
-                    raise RuntimeError("Building failed!")
-                import nose
-                nose.run_exit(argv=['nosetests'])
-        cmdclass['test'] = NoseTestCommand
-    except ImportError:
-        pass
+                def run_tests(self):
+                    # Run nose ensuring that argv simulates running nosetests directly
+                    ret = subprocess.call([sys.executable, sys.argv[0], 'build_ext', '-i'])
+                    if ret != 0:
+                        raise RuntimeError("Building failed!")
+                    import nose
+                    nose.run_exit(argv=['nosetests'])
+            cmdclass['test'] = NoseTestCommand
+        except ImportError:
+            pass
 
     metadata = dict(name=DISTNAME,
                     maintainer=MAINTAINER,
