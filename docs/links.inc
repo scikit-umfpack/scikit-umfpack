@@ -11,6 +11,5 @@
 .. _pypi: https://pypi.python.org/pypi
 .. _testpypi: https://testpypi.python.org/pypi
 .. _twine: https://pypi.python.org/pypi/twine
-.. _pypandoc: https://pypi.python.org/pypi/pypandoc
 
 .. _virtualenv: https://virtualenv.pypa.io
