@@ -2,26 +2,9 @@
 
 descr = """Python interface to UMFPACK sparse direct solver."""
 
-def read_as_rst(filename):
-    try:
-        from pypandoc import convert
-
-    except ImportError:
-        print('warning: pypandoc module not found,'
-              ' could not convert to RST!')
-
-        import codecs
-        with codecs.open(filename, encoding='UTF-8') as fd:
-            out = fd.read()
-
-    else:
-        out = convert(filename, 'rst')
-
-    return out
-
 DISTNAME            = 'scikit-umfpack'
 DESCRIPTION         = 'Python interface to UMFPACK sparse direct solver.'
-LONG_DESCRIPTION    = read_as_rst('README.md')
+LONG_DESCRIPTION    = open('README.rst').read()
 MAINTAINER          = 'Robert Cimrman'
 MAINTAINER_EMAIL    = 'cimrman3@ntc.zcu.cz'
 URL                 = 'https://scikit-umfpack.github.io/scikit-umfpack'

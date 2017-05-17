@@ -41,9 +41,6 @@ Release Tasks
    a wrong file is uploaded, the only fix is to create a new release. Always
    use `testpypi`_ first.
 
-#. Make sure that `pypandoc`_ is installed so that Markdown to ReST conversion
-   of ``README.md`` in ``setup.py`` works.
-
 #. Bump version number:
 
    - in ``setup.py``
