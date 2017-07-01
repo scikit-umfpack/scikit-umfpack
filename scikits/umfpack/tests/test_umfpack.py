@@ -7,7 +7,7 @@ from __future__ import division, print_function, absolute_import
 import warnings
 import random
 
-from numpy.testing import assert_array_almost_equal, run_module_suite
+from numpy.testing import assert_array_almost_equal, run_module_suite, dec
 from numpy.testing.utils import WarningManager
 
 from scipy import rand, matrix, diag, eye
@@ -17,12 +17,17 @@ from scipy.sparse.linalg import linsolve
 import numpy as np
 import scikits.umfpack as um
 
+
+_is_32bit_platform = np.intp(0).itemsize < 8
+
+
 # Force int64 index dtype even when indices fit into int32.
 def _to_int64(x):
     y = csc_matrix(x).copy()
     y.indptr = y.indptr.astype(np.int64)
     y.indices = y.indices.astype(np.int64)
     return y
+
 
 class _DeprecationAccept:
     def setUp(self):
@@ -46,6 +51,7 @@ class TestScipySolvers(_DeprecationAccept):
         x = linsolve.spsolve(a, b)
         assert_array_almost_equal(a*x, b)
 
+    @dec.skipif(_is_32bit_platform)
     def test_solve_complex_long_umfpack(self):
         # Solve with UMFPACK: double precision complex, long indices
         linsolve.use_solver(useUmfpack=True)
@@ -62,6 +68,7 @@ class TestScipySolvers(_DeprecationAccept):
         x = linsolve.spsolve(a, b)
         assert_array_almost_equal(a*x, b)
 
+    @dec.skipif(_is_32bit_platform)
     def test_solve_long_umfpack(self):
         # Solve with UMFPACK: double precision
         linsolve.use_solver(useUmfpack=True)
@@ -89,6 +96,7 @@ class TestScipySolvers(_DeprecationAccept):
         x2 = solve(self.b2)
         assert_array_almost_equal(a*x2, self.b2)
 
+    @dec.skipif(_is_32bit_platform)
     def test_factorized_long_umfpack(self):
         # Prefactorize (with UMFPACK) matrix for solving with multiple rhs
         linsolve.use_solver(useUmfpack=True)
@@ -143,11 +151,12 @@ class TestFactorization(_DeprecationAccept):
 
             assert_array_almost_equal(P*R*A*Q,L*U)
 
-    def test_complex_long_lu(self):
+    @dec.skipif(_is_32bit_platform)
+    def test_complex_int64_lu(self):
         # Getting factors of complex matrix with long indices
         umfpack = um.UmfpackContext("zl")
 
-        for A in self.complex_long_matrices:
+        for A in self.complex_int64_matrices:
             umfpack.numeric(A)
 
             (L,U,P,Q,R,do_recip) = umfpack.lu(A)
@@ -183,11 +192,12 @@ class TestFactorization(_DeprecationAccept):
 
             assert_array_almost_equal(P*R*A*Q,L*U)
 
-    def test_real_long_lu(self):
+    @dec.skipif(_is_32bit_platform)
+    def test_real_int64_lu(self):
         # Getting factors of real matrix with long indices
         umfpack = um.UmfpackContext("dl")
 
-        for A in self.real_long_matrices:
+        for A in self.real_int64_matrices:
             umfpack.numeric(A)
 
             (L,U,P,Q,R,do_recip) = umfpack.lu(A)
@@ -221,9 +231,9 @@ class TestFactorization(_DeprecationAccept):
         self.complex_matrices = [x.astype(np.complex128)
                                  for x in self.real_matrices]
 
-        self.real_long_matrices = [_to_int64(x)
+        self.real_int64_matrices = [_to_int64(x)
                                    for x in self.real_matrices]
-        self.complex_long_matrices = [_to_int64(x)
+        self.complex_int64_matrices = [_to_int64(x)
                                       for x in self.complex_matrices]
 
         _DeprecationAccept.setUp(self)
