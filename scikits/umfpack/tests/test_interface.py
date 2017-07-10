@@ -1,19 +1,27 @@
 from __future__ import division, print_function, absolute_import
 
 import warnings
-import random
 
-from numpy.testing import assert_allclose, run_module_suite
+from numpy.testing import assert_allclose, run_module_suite, dec
 from numpy.testing.utils import WarningManager
 from numpy.linalg import norm as dense_norm
 
-from scipy import rand, matrix, diag, eye
 from scipy.sparse import csc_matrix, spdiags, SparseEfficiencyWarning
 from scipy.sparse import hstack
-from scipy.sparse.linalg import linsolve
 
 import numpy as np
 import scikits.umfpack as um
+
+
+_is_32bit_platform = np.intp(0).itemsize < 8
+
+
+# Force int64 index dtype even when indices fit into int32.
+def _to_int64(x):
+    y = csc_matrix(x).copy()
+    y.indptr = y.indptr.astype(np.int64)
+    y.indices = y.indices.astype(np.int64)
+    return y
 
 
 class TestSolvers(object):
@@ -40,9 +48,26 @@ class TestSolvers(object):
         x = um.spsolve(a, b)
         assert_allclose(a*x, b)
 
+    @dec.skipif(_is_32bit_platform)
+    def test_solve_complex_int64_umfpack(self):
+        # Solve with UMFPACK: double precision complex, int64 indices
+        a = _to_int64(self.a.astype('D'))
+        b = self.b
+        x = um.spsolve(a, b)
+        assert_allclose(a*x, b)
+
     def test_solve_umfpack(self):
         # Solve with UMFPACK: double precision
         a = self.a.astype('d')
+        b = self.b
+        x = um.spsolve(a, b)
+        assert_allclose(a*x, b)
+
+    @dec.skipif(_is_32bit_platform)
+    def test_solve_int64_umfpack(self):
+        # Solve with UMFPACK: double precision, int64 indices
+        a = _to_int64(self.a.astype('d'))
+
         b = self.b
         x = um.spsolve(a, b)
         assert_allclose(a*x, b)
@@ -57,6 +82,18 @@ class TestSolvers(object):
     def test_splu_solve(self):
         # Prefactorize (with UMFPACK) matrix for solving with multiple rhs
         a = self.a.astype('d')
+        lu = um.splu(a)
+
+        x1 = lu.solve(self.b)
+        assert_allclose(a*x1, self.b)
+        x2 = lu.solve(self.b2)
+        assert_allclose(a*x2, self.b2)
+
+    @dec.skipif(_is_32bit_platform)
+    def test_splu_solve_int64(self):
+        # Prefactorize (with UMFPACK) matrix with int64 indices for solving with
+        # multiple rhs
+        a = _to_int64(self.a.astype('d'))
         lu = um.splu(a)
 
         x1 = lu.solve(self.b)
@@ -95,3 +132,6 @@ class TestSolvers(object):
         A2 = (R * Pr.T * (lu.L * lu.U) * Pc.T).A
 
         assert_allclose(A2, A.A, atol=1e-13)
+
+if __name__ == "__main__":
+    run_module_suite()
