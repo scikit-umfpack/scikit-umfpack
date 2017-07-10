@@ -18,6 +18,7 @@
 
 #include <umfpack.h>
 
+typedef long UF_long;
 typedef long SuiteSparse_long;
 
 %init %{
