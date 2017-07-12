@@ -11,12 +11,11 @@ Release Tasks
          testpypi
 
      [pypi]
-     repository = https://pypi.python.org/pypi
      username = your_pypi_name
      password = your_pypi_password
 
      [testpypi]
-     repository = https://testpypi.python.org/pypi
+     repository = https://test.pypi.org/legacy/
      username = your_testpypi_name
      password = your_testpypi_password
 
