@@ -469,19 +469,19 @@ class UmfpackContext(Struct):
         ##
         # Should check types of indices to correspond to familyTypes.
         if self.family[1] == 'i':
-            if (indx.dtype != np.dtype('i')) \
-                   or mtx.indptr.dtype != np.dtype('i'):
+            if (indx.dtype != np.dtype(np.int32)) \
+                   or mtx.indptr.dtype != np.dtype(np.int32):
                 raise ValueError('matrix must have int indices')
         else:
-            if (indx.dtype != np.dtype('l')) \
-                   or mtx.indptr.dtype != np.dtype('l'):
+            if (indx.dtype != np.dtype(np.int64)) \
+                   or mtx.indptr.dtype != np.dtype(np.int64):
                 raise ValueError('matrix must have long indices')
 
         if self.isReal:
-            if mtx.data.dtype != np.dtype('f8'):
+            if mtx.data.dtype != np.dtype(np.float64):
                 raise ValueError('matrix must have float64 values')
         else:
-            if mtx.data.dtype != np.dtype('c16'):
+            if mtx.data.dtype != np.dtype(np.complex128):
                 raise ValueError('matrix must have complex128 values')
 
         return indx
