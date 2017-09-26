@@ -21,7 +21,7 @@ from __future__ import division, print_function, absolute_import
 from warnings import warn
 import sys
 import numpy as np
-from numpy import asarray, empty, ravel, nonzero
+from numpy import asarray
 from scipy.sparse import (isspmatrix_csc, isspmatrix_csr, isspmatrix,
                           SparseEfficiencyWarning, csc_matrix, hstack)
 
