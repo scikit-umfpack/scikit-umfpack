@@ -1,7 +1,8 @@
 from __future__ import division, print_function, absolute_import
 
-from numpy.testing import (assert_allclose, run_module_suite, dec,
-                           suppress_warnings)
+import warnings
+
+from numpy.testing import assert_allclose, run_module_suite, dec
 from numpy.linalg import norm as dense_norm
 
 from scipy.sparse import csc_matrix, spdiags, SparseEfficiencyWarning
@@ -30,10 +31,10 @@ class TestSolvers(object):
         self.b = np.array([1, 2, 3, 4, 5], dtype=np.float64)
         self.b2 = np.array([5, 4, 3, 2, 1], dtype=np.float64)
 
-        self.mgr = suppress_warnings()
-        self.mgr.filter(DeprecationWarning)
-        self.mgr.filter(SparseEfficiencyWarning)
+        self.mgr = warnings.catch_warnings()
         self.mgr.__enter__()
+
+        warnings.simplefilter('ignore', SparseEfficiencyWarning)
 
     def tearDown(self):
         self.mgr.__exit__()
