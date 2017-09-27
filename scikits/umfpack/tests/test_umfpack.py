@@ -4,11 +4,10 @@
 
 from __future__ import division, print_function, absolute_import
 
-import warnings
 import random
 
-from numpy.testing import assert_array_almost_equal, run_module_suite, dec
-from numpy.testing.utils import WarningManager
+from numpy.testing import (assert_array_almost_equal, run_module_suite, dec,
+                           suppress_warnings)
 
 from scipy import rand, matrix, diag, eye
 from scipy.sparse import csc_matrix, spdiags, SparseEfficiencyWarning
@@ -31,10 +30,10 @@ def _to_int64(x):
 
 class _DeprecationAccept:
     def setUp(self):
-        self.mgr = WarningManager()
+        self.mgr = suppress_warnings()
+        self.mgr.filter(DeprecationWarning)
+        self.mgr.filter(SparseEfficiencyWarning)
         self.mgr.__enter__()
-        warnings.simplefilter("ignore", DeprecationWarning)
-        warnings.simplefilter('ignore', SparseEfficiencyWarning)
 
     def tearDown(self):
         self.mgr.__exit__()
