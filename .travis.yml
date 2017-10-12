@@ -24,7 +24,7 @@ cache:
 before_install:
   - set -o pipefail
   - travis_retry pip install --upgrade pip wheel   # get pip >= 7, which caches built packages
-  - travis_retry pip install numpy
+  - travis_retry pip install numpy pytest
   # Convert pip output to dots so that Travis doesn't quit while scipy is building
   - (pip install -v scipy 2>&1 | tee scipy-build.log | perl -e 'my $start=time(); local $|=1; while (<STDIN>) { if (time() > $start + 5) { print "."; $start=time(); }; }') || { cat scipy-build.log; exit 1; }
   - |
@@ -32,7 +32,8 @@ before_install:
         travis_retry pip install Sphinx numpydoc
     fi
 script:
-  - python setup.py test
+  - pip install -e .
+  - pytest
   - |
     if [ "$DOCS" == "1" ]; then
         python setup.py build_sphinx
