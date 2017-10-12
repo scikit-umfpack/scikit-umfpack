@@ -1,6 +1,7 @@
 from __future__ import division, print_function, absolute_import
 
 import warnings
+import unittest
 
 from numpy.testing import assert_allclose, run_module_suite, dec
 from numpy.linalg import norm as dense_norm
@@ -23,7 +24,7 @@ def _to_int64(x):
     return y
 
 
-class TestSolvers(object):
+class TestSolvers(unittest.TestCase):
     """Tests inverting a sparse linear system"""
 
     def setUp(self):

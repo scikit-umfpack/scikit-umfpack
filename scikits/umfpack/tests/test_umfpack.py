@@ -5,7 +5,7 @@
 from __future__ import division, print_function, absolute_import
 
 import random
-
+import unittest
 import warnings
 
 from numpy.testing import assert_array_almost_equal, run_module_suite, dec
@@ -29,7 +29,7 @@ def _to_int64(x):
     return y
 
 
-class _DeprecationAccept:
+class _DeprecationAccept(unittest.TestCase):
     def setUp(self):
         self.mgr = warnings.catch_warnings()
         self.mgr.__enter__()
