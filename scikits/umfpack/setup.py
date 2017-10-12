@@ -15,7 +15,7 @@ def configuration(parent_package='',top_path=None):
     ## The following addition is needed when linking against a umfpack built
     ## from the latest SparseSuite. Not (strictly) needed when linking against
     ## the version in the ubuntu repositories.
-    if not sys.platform == 'darwin':
+    if not sys.platform in ('darwin', 'win32'):
         umf_info['libraries'].insert(0, 'rt')
 
     umfpack_i_file = config.paths('umfpack.i')[0]
@@ -28,6 +28,13 @@ def configuration(parent_package='',top_path=None):
     build_info = {}
     dict_append(build_info, **umf_info)
     dict_append(build_info, **blas_info)
+    
+    # On windows, vcpkg names the library 'libumfpack'
+    # rather than 'umfpack' and this change is not yet
+    # in numpy; therefore, we fix the problem here
+    if sys.platform == 'win32':
+        build_info['libraries'].remove('umfpack')
+        build_info['libraries'].append('libumfpack')
 
     config.add_extension('__umfpack',
                          sources=[umfpack_i],
