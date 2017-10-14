@@ -117,7 +117,7 @@ def setup_package():
         import numpy
         INSTALL_REQUIRES = [
             'numpy>=' + str(numpy.__version__),
-            'scipy,
+            'scipy',
         ]
     except ImportError:
         INSTALL_REQUIRES = []
