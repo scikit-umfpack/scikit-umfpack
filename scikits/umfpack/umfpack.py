@@ -505,16 +505,16 @@ class UmfpackContext(Struct):
         if self.isReal:
             status, self._symbolic\
                     = self.funs.symbolic(mtx.shape[0], mtx.shape[1],
-                                          mtx.indptr.astype('int32'),
-                                          indx.astype('int32'),
+                                          mtx.indptr,
+                                          indx,
                                           mtx.data,
                                           self.control, self.info)
         else:
             real, imag = mtx.data.real.copy(), mtx.data.imag.copy()
             status, self._symbolic\
                     = self.funs.symbolic(mtx.shape[0], mtx.shape[1],
-                                          mtx.indptr.astype('int32'),
-                                          indx.astype('int32'),
+                                          mtx.indptr,
+                                          indx,
                                           real, imag,
                                           self.control, self.info)
 
