@@ -113,6 +113,15 @@ def setup_package():
         except ImportError:
             pass
 
+    try:
+        import numpy
+        INSTALL_REQUIRES = [
+            'numpy>=' + str(numpy.__version__),
+            'scipy',
+        ]
+    except ImportError:
+        INSTALL_REQUIRES = []
+
     metadata = dict(name=DISTNAME,
                     maintainer=MAINTAINER,
                     maintainer_email=MAINTAINER_EMAIL,
@@ -122,6 +131,7 @@ def setup_package():
                     version=VERSION,
                     download_url=DOWNLOAD_URL,
                     long_description=LONG_DESCRIPTION,
+                    install_requires=INSTALL_REQUIRES,
                     classifiers=[
                         'Development Status :: 4 - Beta',
                         'Environment :: Console',
