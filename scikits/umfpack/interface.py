@@ -21,12 +21,18 @@ from __future__ import division, print_function, absolute_import
 from warnings import warn
 import sys
 import numpy as np
-from numpy import asarray, empty, ravel, nonzero
+from numpy import asarray
 from scipy.sparse import (isspmatrix_csc, isspmatrix_csr, isspmatrix,
                           SparseEfficiencyWarning, csc_matrix, hstack)
 
 from .umfpack import UmfpackContext, UMFPACK_A
 
+_families = {
+    (np.float64, np.int32): 'di',
+    (np.complex128, np.int32): 'zi',
+    (np.float64, np.int64): 'dl',
+    (np.complex128, np.int64): 'zl'
+}
 
 __all__ = ['spsolve', 'splu', 'UmfpackLU']
 
@@ -185,11 +191,18 @@ class UmfpackLU(object):
         if (M != N):
             raise ValueError("matrix must be square (has shape %s)" % ((M, N),))
 
-        if A.dtype.char not in 'dD':
-            raise ValueError("Only double precision matrices supported")
+        f_type = np.sctypeDict[A.dtype.name]
+        i_type = np.sctypeDict[A.indices.dtype.name]
+        try:
+            family = _families[(f_type, i_type)]
 
-        family = {'di': 'di', 'Di': 'zi', 'dl': 'dl', 'Dl': 'zl'}
-        self.umf = UmfpackContext(family[A.dtype.char + A.indices.dtype.char])
+        except KeyError:
+            msg = 'only float64 or complex128 matrices with int32 or int64' \
+                ' indices are supported! (got: matrix: %s, indices: %s)' \
+                % (f_type, i_type)
+            raise ValueError(msg)
+
+        self.umf = UmfpackContext(family)
         self.umf.numeric(A)
 
         self._A = A

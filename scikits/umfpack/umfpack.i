@@ -12,14 +12,27 @@
 %{
 #include <umfpack.h>
 #include "numpy/arrayobject.h"
+#include "stdint.h"
 %}
+
+%include "stdint.i"
 
 %feature("autodoc", "1");
 
 #include <umfpack.h>
 
-typedef long UF_long;
-typedef long SuiteSparse_long;
+typedef int64_t UF_long;
+typedef int64_t SuiteSparse_long;
+
+/* Convert from Python --> C */
+%typemap(in) SuiteSparse_long {
+  $1 = (SuiteSparse_long)PyInt_AsLong($input);
+}
+
+/* Convert from C --> Python */
+%typemap(out) SuiteSparse_long {
+  $result = PyInt_FromLong((int)$1);
+}
 
 %init %{
     import_array();
@@ -166,6 +179,12 @@ ARRAY_IN( long, const long, LONG )
     const long Ai [ ]
 };
 
+ARRAY_IN( SuiteSparse_long, const SuiteSparse_long, INT64 )
+%apply const SuiteSparse_long *array {
+    const SuiteSparse_long Ap [ ],
+    const SuiteSparse_long Ai [ ]
+};
+
 ARRAY_IN( double, const double, DOUBLE )
 %apply const double *array {
     const double Ax [ ],
@@ -248,8 +267,14 @@ OPAQUE_ARGINOUT( void * )
     long *n_col,
     long *nz_udiag
 };
+%apply long *OUTPUT {
+    SuiteSparse_long *lnz,
+    SuiteSparse_long *unz,
+    SuiteSparse_long *n_row,
+    SuiteSparse_long *n_col,
+    SuiteSparse_long *nz_udiag
+};
 %include <umfpack_get_lunz.h>
-
 
 ARRAY_IN( double, double, DOUBLE )
 %apply double *array {
@@ -283,6 +308,17 @@ ARRAY_IN( long, long, LONG )
     long Q [ ]
 };
 %apply long *OUTPUT { long *do_recip};
+
+ARRAY_IN( SuiteSparse_long, SuiteSparse_long, INT64 )
+%apply SuiteSparse_long *array {
+    SuiteSparse_long Lp [ ],
+    SuiteSparse_long Lj [ ],
+    SuiteSparse_long Up [ ],
+    SuiteSparse_long Ui [ ],
+    SuiteSparse_long P [ ],
+    SuiteSparse_long Q [ ]
+};
+%apply long *OUTPUT { SuiteSparse_long *do_recip};
 
 %include <umfpack_get_numeric.h>
 
