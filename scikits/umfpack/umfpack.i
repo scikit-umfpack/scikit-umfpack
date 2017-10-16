@@ -21,6 +21,12 @@
 
 #include <umfpack.h>
 
+%{
+#ifndef SuiteSparse_long
+    #define SuiteSparse_long UF_long
+#endif
+%}
+
 typedef int64_t SuiteSparse_long;
 typedef SuiteSparse_long UF_long;
 
