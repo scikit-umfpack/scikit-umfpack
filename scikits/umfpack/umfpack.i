@@ -21,8 +21,8 @@
 
 #include <umfpack.h>
 
-typedef int64_t UF_long;
 typedef int64_t SuiteSparse_long;
+typedef SuiteSparse_long UF_long;
 
 /* Convert from Python --> C */
 %typemap(in) SuiteSparse_long {
