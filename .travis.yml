@@ -32,7 +32,7 @@ before_install:
         travis_retry pip install Sphinx numpydoc
     fi
 script:
-  - pip install -e .
+  - pip install --pre -e .
   - pytest
   - |
     if [ "$DOCS" == "1" ]; then
