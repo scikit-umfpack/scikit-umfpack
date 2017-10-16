@@ -32,7 +32,7 @@ before_install:
         travis_retry pip install Sphinx numpydoc
     fi
 script:
-  - pip install --pre scipy
+  - pip install scipy==1.0.0rc1
   - pip install --pre -e .
   - pytest
   - |
