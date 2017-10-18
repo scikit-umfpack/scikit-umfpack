@@ -46,22 +46,26 @@ from Nadir Soualem are helpful for getting a working METIS build.
 
 Otherwise, I commend you to the documentation.
 
-Install
-=======
+Installation
+============
 
-This package uses distutils, which is the default way of installing
-python modules. In the directory scikit-umfpack (the same as the file
-you are reading now) do:
+.. include-start
 
-::
+Releases of scikit-umfpack can be installed using ``pip``. For a system-wide
+installation run::
 
-    python setup.py install
+  pip install --upgrade scikit-umfpack
 
-or for a local installation:
+or for a user installation run ::
 
-::
+  pip install --upgrade --user scikit-umfpack
 
-    python setup.py install --root=<DIRECTORY>
+To install scikit-umfpack from its source code directory, run in that
+directory (``--user`` means a user installation)::
+
+  pip install --upgrade --user .
+
+.. include-end
 
 Development
 ===========
