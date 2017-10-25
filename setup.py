@@ -45,16 +45,17 @@ def git_version():
 
 def get_version_info():
     # Adding the git rev number needs to be done inside
-    # write_version_py(), otherwise the import of scipy.version messes
+    # write_version_py(), otherwise the import of scikits.umfpack.version messes
     # up the build under Python 3.
     FULLVERSION = VERSION
     if os.path.exists('.git'):
         GIT_REVISION = git_version()
-    elif os.path.exists('scipy/version.py'):
+    elif os.path.exists('scikits/umfpack/version.py'):
         # must be a source distribution, use existing version file
-        # load it as a separate module to not load scipy/__init__.py
+        # load it as a separate module to not load scikits/umfpack/__init__.py
         import imp
-        version = imp.load_source('scipy.version', 'scipy/version.py')
+        version = imp.load_source('scikits.umfpack.version',
+                                  'scikits/umfpack/version.py')
         GIT_REVISION = version.git_revision
     else:
         GIT_REVISION = "Unknown"
