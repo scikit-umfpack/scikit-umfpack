@@ -12,6 +12,8 @@ from __future__ import division, print_function, absolute_import
 from .umfpack import *
 from .interface import *
 
+from .version import version as __version__
+
 if __doc__ is not None:
     from .umfpack import __doc__ as _umfpack_doc
     from .interface import __doc__ as _interface_doc
