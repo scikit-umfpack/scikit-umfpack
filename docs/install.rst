@@ -1,29 +1,17 @@
 Installation
 ============
 
-This package uses distutils, which is the default way of installing python
-modules. In the directory scikit-umfpack (the same as the file you are reading
-now) do::
+.. include:: ../README.rst
+  :start-after: include-start
+  :end-before: include-end
 
-  python setup.py install
+When building from the sources, creating a ``site.cfg`` file with the
+`[umfpack]` section describing location of umfpack header files and libraries
+might be necessary. This file can be created next to the package's
+``setup.py``.
 
-or for a local installation::
-
-  python setup.py install --root=<DIRECTORY>
-
-Example site.cfg entry for UMFPACK v4.4 in <dir>::
-
-    [amd]
-    library_dirs = <dir>/UMFPACK/AMD/Lib
-    include_dirs = <dir>/UMFPACK/AMD/Include
-    amd_libs = amd
-
-    [umfpack]
-    library_dirs = <dir>/UMFPACK/UMFPACK/Lib
-    include_dirs = <dir>/UMFPACK/UMFPACK/Include
-    umfpack_libs = umfpack
-
-    UMFPACK v5.0 (as part of UFsparse package) in <dir>:
+Example site.cfg entry for UMFPACK v5.0 (as part of UFsparse package) in
+<dir>::
 
     [amd]
     library_dirs = <dir>/UFsparse/AMD/Lib
@@ -35,4 +23,5 @@ Example site.cfg entry for UMFPACK v4.4 in <dir>::
     include_dirs = <dir>/UFsparse/UMFPACK/Include, <dir>/UFsparse/UFconfig
     umfpack_libs = umfpack
 
-
+Later versions of umfpack live in the Suitesparse package - then the ``[amd]``
+section is not necessary.

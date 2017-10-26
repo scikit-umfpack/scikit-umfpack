@@ -86,8 +86,9 @@ Release Tasks
      cd test-umfpack
      source bin/activate
 
+     python -m pip install --upgrade pip
      pip install nose numpy scipy
-     pip install --pre -i https://testpypi.python.org/pypi scikit-umfpack
+     pip install --no-deps --upgrade --pre -i https://testpypi.python.org/pypi scikit-umfpack
 
      nosetests -v scikits.umfpack
 
