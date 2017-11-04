@@ -66,6 +66,8 @@ Release Tasks
      cd ..
      nosetests -v scikits.umfpack
 
+#. If OK, merge the version branch.
+
 #. Upload to `testpypi`_ and test::
 
      python setup.py sdist
@@ -93,6 +95,8 @@ Release Tasks
      nosetests -v scikits.umfpack
 
      deactivate
+
+#. If OK, tag the version in git & push to github.
 
 #. Upload to `pypi`_:
 
