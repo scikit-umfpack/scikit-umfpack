@@ -118,3 +118,18 @@ Release Tasks
 
 #. If wheels are available for the released version, upload them also using
    `twine`_.
+
+#. The wheels from https://github.com/scikit-umfpack/scikit-umfpack-wheels can
+   be uploaded by
+   https://github.com/MacPython/terryfy/blob/master/wheel-uploader script -
+   save it to the scikit-umfpack directory, and change permissions to make it
+   executable. Then, for example, upload to `testpypi`_::
+
+     VERSION=0.3.1
+     CDN_URL=https://3f23b170c54c2533c070-1c8a9b3114517dc5fe17b7c3f8c63a43.ssl.cf2.rackcdn.com
+     ./wheel-uploader -u $CDN_URL -v -w ./wheels -t all -r testpypi scikit_umfpack $VERSION
+
+
+   and to `pypi`_::
+
+     ./wheel-uploader -u $CDN_URL -v -w ./wheels -t all scikit_umfpack $VERSION
