@@ -97,11 +97,14 @@ Release Tasks
 #. Upload to `pypi`_:
 
    - Check the version numbers in ``setup.py`` and ``docs/conf.py``
+   - Change ISRELEASED in ``setup.py`` to True
    - Do::
+
 
        python setup.py sdist
        twine upload dist/scikit-umfpack-<version>.tar.gz
 
+   - Change ISRELEASED in ``setup.py`` to False
    - For testing, see the previous step.
 
 #. Update gh-pages::
