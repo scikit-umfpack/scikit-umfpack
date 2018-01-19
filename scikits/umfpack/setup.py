@@ -29,13 +29,6 @@ def configuration(parent_package='',top_path=None):
     dict_append(build_info, **umf_info)
     dict_append(build_info, **blas_info)
     
-    # On windows, vcpkg names the library 'libumfpack'
-    # rather than 'umfpack' and this change is not yet
-    # in numpy; therefore, we fix the problem here
-    if sys.platform == 'win32':
-        build_info['libraries'].remove('umfpack')
-        build_info['libraries'].append('libumfpack')
-
     config.add_extension('__umfpack',
                          sources=[umfpack_i],
                          depends=['umfpack.i'],
