@@ -36,7 +36,7 @@ on Ubuntu 14.04 can be achieved with
 
 Otherwise, you will need to build from source. Unfortunately,
 SuiteSparse's makefiles do not support building a shared library out of
-the box. You may find `Stefan Fürtinger instructions
+the box. You may find `Stefan Fuertinger instructions
 helpful <http://fuertinger.lima-city.de/research.html#building-numpy-and-scipy>`__.
 
 Furthmore, building METIS-4.0, an optional but important compile time
