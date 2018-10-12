@@ -10,7 +10,7 @@ MAINTAINER_EMAIL    = 'cimrman3@ntc.zcu.cz'
 URL                 = 'https://scikit-umfpack.github.io/scikit-umfpack'
 LICENSE             = 'BSD'
 DOWNLOAD_URL        = URL
-VERSION             = '0.3.1'
+VERSION             = '0.3.2'
 ISRELEASED          = False
 
 import sys
