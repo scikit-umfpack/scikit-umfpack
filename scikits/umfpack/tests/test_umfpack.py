@@ -11,8 +11,7 @@ import warnings
 from numpy.testing import assert_array_almost_equal, run_module_suite, dec
 
 from scipy import rand, matrix, diag, eye
-from scipy.sparse import csc_matrix, spdiags, SparseEfficiencyWarning
-from scipy.sparse.linalg import linsolve
+from scipy.sparse import csc_matrix, linalg, spdiags, SparseEfficiencyWarning
 
 import numpy as np
 import scikits.umfpack as um
@@ -45,51 +44,51 @@ class TestScipySolvers(_DeprecationAccept):
 
     def test_solve_complex_umfpack(self):
         # Solve with UMFPACK: double precision complex
-        linsolve.use_solver(useUmfpack=True)
+        linalg.use_solver(useUmfpack=True)
         a = self.a.astype('D')
         b = self.b
-        x = linsolve.spsolve(a, b)
+        x = linalg.spsolve(a, b)
         assert_array_almost_equal(a*x, b)
 
     @dec.skipif(_is_32bit_platform)
     def test_solve_complex_long_umfpack(self):
         # Solve with UMFPACK: double precision complex, long indices
-        linsolve.use_solver(useUmfpack=True)
+        linalg.use_solver(useUmfpack=True)
         a = _to_int64(self.a.astype('D'))
         b = self.b
-        x = linsolve.spsolve(a, b)
+        x = linalg.spsolve(a, b)
         assert_array_almost_equal(a*x, b)
 
     def test_solve_umfpack(self):
         # Solve with UMFPACK: double precision
-        linsolve.use_solver(useUmfpack=True)
+        linalg.use_solver(useUmfpack=True)
         a = self.a.astype('d')
         b = self.b
-        x = linsolve.spsolve(a, b)
+        x = linalg.spsolve(a, b)
         assert_array_almost_equal(a*x, b)
 
     @dec.skipif(_is_32bit_platform)
     def test_solve_long_umfpack(self):
         # Solve with UMFPACK: double precision
-        linsolve.use_solver(useUmfpack=True)
+        linalg.use_solver(useUmfpack=True)
         a = _to_int64(self.a.astype('d'))
         b = self.b
-        x = linsolve.spsolve(a, b)
+        x = linalg.spsolve(a, b)
         assert_array_almost_equal(a*x, b)
 
     def test_solve_sparse_rhs(self):
         # Solve with UMFPACK: double precision, sparse rhs
-        linsolve.use_solver(useUmfpack=True)
+        linalg.use_solver(useUmfpack=True)
         a = self.a.astype('d')
         b = csc_matrix(self.b).T
-        x = linsolve.spsolve(a, b)
+        x = linalg.spsolve(a, b)
         assert_array_almost_equal(a*x, self.b)
 
     def test_factorized_umfpack(self):
         # Prefactorize (with UMFPACK) matrix for solving with multiple rhs
-        linsolve.use_solver(useUmfpack=True)
+        linalg.use_solver(useUmfpack=True)
         a = self.a.astype('d')
-        solve = linsolve.factorized(a)
+        solve = linalg.factorized(a)
 
         x1 = solve(self.b)
         assert_array_almost_equal(a*x1, self.b)
@@ -99,9 +98,9 @@ class TestScipySolvers(_DeprecationAccept):
     @dec.skipif(_is_32bit_platform)
     def test_factorized_long_umfpack(self):
         # Prefactorize (with UMFPACK) matrix for solving with multiple rhs
-        linsolve.use_solver(useUmfpack=True)
+        linalg.use_solver(useUmfpack=True)
         a = _to_int64(self.a.astype('d'))
-        solve = linsolve.factorized(a)
+        solve = linalg.factorized(a)
 
         x1 = solve(self.b)
         assert_array_almost_equal(a*x1, self.b)
@@ -110,9 +109,9 @@ class TestScipySolvers(_DeprecationAccept):
 
     def test_factorized_without_umfpack(self):
         # Prefactorize matrix for solving with multiple rhs
-        linsolve.use_solver(useUmfpack=False)
+        linalg.use_solver(useUmfpack=False)
         a = self.a.astype('d')
-        solve = linsolve.factorized(a)
+        solve = linalg.factorized(a)
 
         x1 = solve(self.b)
         assert_array_almost_equal(a*x1, self.b)
