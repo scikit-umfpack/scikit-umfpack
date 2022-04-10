@@ -1,8 +1,8 @@
 scikit-umfpack
 ==============
 
-scikit-umfpack provides wrapper of UMFPACK sparse direct solver to
-SciPy.
+`scikit-umfpack <https://scikit-umfpack.github.io/scikit-umfpack>`_ provides
+wrapper of UMFPACK sparse direct solver to SciPy.
 
 Usage:
 
