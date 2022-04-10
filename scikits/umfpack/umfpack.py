@@ -13,6 +13,21 @@ UMFPACK homepage: http://www.cise.ufl.edu/research/sparse/umfpack
 Use 'print UmfpackContext().funs' to see all UMFPACK library functions the
 module exposes, if you need something not covered by the examples below.
 
+References
+----------
+
+[1] T. A. Davis, Algorithm 832:  UMFPACK - an unsymmetric-pattern
+    multifrontal method with a column pre-ordering strategy, ACM Trans. on
+    Mathematical Software, 30(2), 2004, pp. 196--199.
+    https://dl.acm.org/doi/abs/10.1145/992200.992206
+[2] P. Amestoy, T. A. Davis, and I. S. Duff, Algorithm 837: An approximate
+    minimum degree ordering algorithm, ACM Trans. on Mathematical Software,
+    30(3), 2004, pp. 381--388.
+    https://dl.acm.org/doi/abs/10.1145/1024074.1024081
+[3] T. A. Davis, J. R. Gilbert, S. Larimore, E. Ng, Algorithm 836:  COLAMD,
+    an approximate column minimum degree ordering algorithm, ACM Trans. on
+    Mathematical Software, 30(3), 2004, pp. 377--380.
+    https://doi.org/10.1145/1024074.1024080
 
 Module contents
 ---------------
@@ -116,7 +131,7 @@ functions).  These attributes are in fact indices into the control array
 """
 
 # Interface to the UMFPACK library.
-# 
+#
 # Author: Robert Cimrman
 
 from __future__ import division, print_function, absolute_import
@@ -394,7 +409,7 @@ class UmfpackContext(Struct):
     Parameters
     ----------
     family : {'di', 'dl', 'zi', 'zl'}
-        Family of UMFPACK functions 
+        Family of UMFPACK functions
     maxCond : float, optional
         If estimated condition number is greater than maxCond,
         a warning is issued (default: 1e12)
