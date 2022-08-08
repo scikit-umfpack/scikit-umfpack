@@ -773,7 +773,7 @@ class UmfpackContext(Struct):
                 self.numeric(mtx)
 
         sol = self.solve(sys, mtx, rhs, autoTranspose)
-        self.free_numeric()
+        self.free()
 
         return sol
 
