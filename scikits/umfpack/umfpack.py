@@ -537,8 +537,6 @@ class UmfpackContext(Struct):
             raise RuntimeError('%s failed with %s' % (self.funs.symbolic,
                                                        umfStatus[status]))
 
-        self.mtx = mtx
-
     ##
     # 30.11.2005, c
     # 01.12.2005
@@ -591,6 +589,8 @@ class UmfpackContext(Struct):
                 raise RuntimeError('%s failed with %s' % (self.funs.numeric,
                                                            umfStatus[status]))
 
+        self.mtx = mtx
+
     ##
     # 14.12.2005, c
     def report_symbolic(self):
@@ -632,7 +632,6 @@ class UmfpackContext(Struct):
         if self._symbolic is not None:
             self.funs.free_symbolic(self._symbolic)
             self._symbolic = None
-            self.mtx = None
 
     ##
     # 30.11.2005, c
@@ -642,7 +641,7 @@ class UmfpackContext(Struct):
         if self._numeric is not None:
             self.funs.free_numeric(self._numeric)
             self._numeric = None
-            self.free_symbolic()
+            self.mtx = None
 
     ##
     # 30.11.2005, c
@@ -774,7 +773,7 @@ class UmfpackContext(Struct):
                 self.numeric(mtx)
 
         sol = self.solve(sys, mtx, rhs, autoTranspose)
-        self.free_numeric()
+        self.free()
 
         return sol
 
