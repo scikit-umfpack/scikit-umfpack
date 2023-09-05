@@ -53,9 +53,8 @@ def get_version_info():
     elif os.path.exists('scikits/umfpack/version.py'):
         # must be a source distribution, use existing version file
         # load it as a separate module to not load scikits/umfpack/__init__.py
-        import imp
-        version = imp.load_source('scikits.umfpack.version',
-                                  'scikits/umfpack/version.py')
+        import importlib
+        version = importlib.machinery.SourceFileLoader('scikits.umfpack.version', 'scikits/umfpack/version.py').load_module()
         GIT_REVISION = version.git_revision
     else:
         GIT_REVISION = "Unknown"
