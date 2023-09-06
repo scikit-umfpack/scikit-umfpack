@@ -22,5 +22,3 @@ if __doc__ is not None:
     del _umfpack_doc, _interface_doc
 
 __all__ = [s for s in dir() if not s.startswith('_')]
-from numpy.testing import Tester
-test = Tester().test

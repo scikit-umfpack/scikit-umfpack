@@ -8,7 +8,7 @@ import random
 import unittest
 import warnings
 
-from numpy.testing import assert_array_almost_equal, run_module_suite
+from numpy.testing import assert_array_almost_equal
 
 from scipy import rand, matrix, diag, eye
 from scipy.sparse import csc_matrix, linalg, spdiags, SparseEfficiencyWarning
@@ -239,4 +239,4 @@ class TestFactorization(_DeprecationAccept):
 
 
 if __name__ == "__main__":
-    run_module_suite()
+    unittest.main()

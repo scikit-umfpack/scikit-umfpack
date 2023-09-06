@@ -3,7 +3,7 @@ from __future__ import division, print_function, absolute_import
 import warnings
 import unittest
 
-from numpy.testing import assert_allclose, run_module_suite
+from numpy.testing import assert_allclose
 from numpy.linalg import norm as dense_norm
 
 from scipy.sparse import csc_matrix, spdiags, SparseEfficiencyWarning
@@ -133,4 +133,4 @@ class TestSolvers(unittest.TestCase):
         assert_allclose(A2, A.A, atol=1e-13)
 
 if __name__ == "__main__":
-    run_module_suite()
+    unittest.main()
