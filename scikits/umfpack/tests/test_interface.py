@@ -3,7 +3,7 @@ from __future__ import division, print_function, absolute_import
 import warnings
 import unittest
 
-from numpy.testing import assert_allclose, run_module_suite, dec
+from numpy.testing import assert_allclose, run_module_suite
 from numpy.linalg import norm as dense_norm
 
 from scipy.sparse import csc_matrix, spdiags, SparseEfficiencyWarning
@@ -47,7 +47,7 @@ class TestSolvers(unittest.TestCase):
         x = um.spsolve(a, b)
         assert_allclose(a*x, b)
 
-    @dec.skipif(_is_32bit_platform)
+    @unittest.skipIf(_is_32bit_platform, reason="requires 64 bit platform")
     def test_solve_complex_int64_umfpack(self):
         # Solve with UMFPACK: double precision complex, int64 indices
         a = _to_int64(self.a.astype('D'))
@@ -62,7 +62,7 @@ class TestSolvers(unittest.TestCase):
         x = um.spsolve(a, b)
         assert_allclose(a*x, b)
 
-    @dec.skipif(_is_32bit_platform)
+    @unittest.skipIf(_is_32bit_platform, reason="requires 64 bit platform")
     def test_solve_int64_umfpack(self):
         # Solve with UMFPACK: double precision, int64 indices
         a = _to_int64(self.a.astype('d'))
@@ -88,7 +88,7 @@ class TestSolvers(unittest.TestCase):
         x2 = lu.solve(self.b2)
         assert_allclose(a*x2, self.b2)
 
-    @dec.skipif(_is_32bit_platform)
+    @unittest.skipIf(_is_32bit_platform, reason="requires 64 bit platform")
     def test_splu_solve_int64(self):
         # Prefactorize (with UMFPACK) matrix with int64 indices for solving with
         # multiple rhs
