@@ -104,9 +104,9 @@ or if you have write privileges:
 Testing
 -------
 
-After installation, you can launch the test suite from outside the
-source directory (you will need to have the ``nose`` package installed):
+After installation, you can launch the test suite from the source directory
+(you will need to have the ``pytest`` package installed):
 
 ::
 
-    nosetests -v scikits.umfpack
+    pytest scikits/umfpack
