@@ -8,7 +8,7 @@ import random
 import unittest
 import warnings
 
-from numpy.testing import assert_array_almost_equal, run_module_suite, dec
+from numpy.testing import assert_array_almost_equal
 
 from scipy import rand, matrix, diag, eye
 from scipy.sparse import csc_matrix, linalg, spdiags, SparseEfficiencyWarning
@@ -50,7 +50,7 @@ class TestScipySolvers(_DeprecationAccept):
         x = linalg.spsolve(a, b)
         assert_array_almost_equal(a*x, b)
 
-    @dec.skipif(_is_32bit_platform)
+    @unittest.skipIf(_is_32bit_platform, reason="requires 64 bit platform")
     def test_solve_complex_long_umfpack(self):
         # Solve with UMFPACK: double precision complex, long indices
         linalg.use_solver(useUmfpack=True)
@@ -67,7 +67,7 @@ class TestScipySolvers(_DeprecationAccept):
         x = linalg.spsolve(a, b)
         assert_array_almost_equal(a*x, b)
 
-    @dec.skipif(_is_32bit_platform)
+    @unittest.skipIf(_is_32bit_platform, reason="requires 64 bit platform")
     def test_solve_long_umfpack(self):
         # Solve with UMFPACK: double precision
         linalg.use_solver(useUmfpack=True)
@@ -95,7 +95,7 @@ class TestScipySolvers(_DeprecationAccept):
         x2 = solve(self.b2)
         assert_array_almost_equal(a*x2, self.b2)
 
-    @dec.skipif(_is_32bit_platform)
+    @unittest.skipIf(_is_32bit_platform, reason="requires 64 bit platform")
     def test_factorized_long_umfpack(self):
         # Prefactorize (with UMFPACK) matrix for solving with multiple rhs
         linalg.use_solver(useUmfpack=True)
@@ -150,7 +150,7 @@ class TestFactorization(_DeprecationAccept):
 
             assert_array_almost_equal(P*R*A*Q,L*U)
 
-    @dec.skipif(_is_32bit_platform)
+    @unittest.skipIf(_is_32bit_platform, reason="requires 64 bit platform")
     def test_complex_int64_lu(self):
         # Getting factors of complex matrix with long indices
         umfpack = um.UmfpackContext("zl")
@@ -191,7 +191,7 @@ class TestFactorization(_DeprecationAccept):
 
             assert_array_almost_equal(P*R*A*Q,L*U)
 
-    @dec.skipif(_is_32bit_platform)
+    @unittest.skipIf(_is_32bit_platform, reason="requires 64 bit platform")
     def test_real_int64_lu(self):
         # Getting factors of real matrix with long indices
         umfpack = um.UmfpackContext("dl")
@@ -239,4 +239,4 @@ class TestFactorization(_DeprecationAccept):
 
 
 if __name__ == "__main__":
-    run_module_suite()
+    unittest.main()
