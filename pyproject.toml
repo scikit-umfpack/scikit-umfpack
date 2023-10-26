@@ -1,6 +1,6 @@
-[build-system]
-requires = [
-    "wheel",
-    "setuptools",
-    "numpy",
-]
+build-backend = 'mesonpy'
+requires = ['meson-python', 'numpy']
+
+[project]
+name = 'scikit-umfpack'
+version = "0.3.4"
