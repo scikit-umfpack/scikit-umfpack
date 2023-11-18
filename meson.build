@@ -1,8 +1,8 @@
 project(
   'scikits.umfpack',
   'c',
-  version: '0.3.4',
-  license: 'BSD',
+  version: '0.4.0.dev0',
+  license: 'BSD-3',
 )
 
 py = import('python').find_installation(pure: false)
