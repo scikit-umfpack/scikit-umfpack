@@ -43,8 +43,7 @@ umfpack_dep = dependency('UMFPACK', required: false)
 if not umfpack_dep.found()
   # Using pkg-config or CMake didn't work, so try the "manual" way.
   # The list of paths here was taken over from numpy.distutils.system_info.py:
-  umfpack_header_dirs = []
-  suitesparse_incdirs = [
+  _try_incdirs = [
       '/usr/include/suitesparse',
       '/usr/local/include',
       '/opt/include',
@@ -53,8 +52,11 @@ if not umfpack_dep.found()
       '/sw/include',
       '/usr/include/suitesparse'
   ]
-  foreach _dir : suitesparse_incdirs
+  suitesparse_incdirs = []
+  umfpack_header_dirs = []
+  foreach _dir : _try_incdirs
     if fs.exists(_dir)
+      suitesparse_incdirs += _dir
       umfpack_header_dirs += include_directories(_dir)
     endif
   endforeach
