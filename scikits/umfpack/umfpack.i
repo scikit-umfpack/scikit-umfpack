@@ -12,10 +12,8 @@
 %{
 #include <umfpack.h>
 #include "numpy/arrayobject.h"
-#include "stdint.h"
 %}
 
-%include "stdint.i"
 
 %feature("autodoc", "1");
 
