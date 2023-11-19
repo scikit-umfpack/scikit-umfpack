@@ -113,5 +113,6 @@ Release Tasks
 
 #. Update gh-pages::
 
+     pip install --no-build-isolation -e .
      ./docs/do-gh-pages.sh
      git push -f origin gh-pages
