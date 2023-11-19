@@ -1,0 +1,20 @@
+# Please refer to https://scipy.github.io/devdocs/building/index.html
+# To use:
+#   $ conda env create -f environment.yml  # `mamba` works too for this command
+#   $ conda activate scipy-dev
+#
+name: scikit-umfpack-dev
+channels:
+  - conda-forge
+dependencies:
+  - python
+  - c-compiler
+  - meson
+  - meson-python
+  - ninja
+  - numpy
+  - scipy
+  - suitesparse
+  - swig
+  - build
+  - pytest

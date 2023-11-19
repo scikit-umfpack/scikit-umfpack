@@ -10,7 +10,6 @@ import warnings
 
 from numpy.testing import assert_array_almost_equal
 
-from scipy import rand, matrix, diag, eye
 from scipy.sparse import csc_matrix, linalg, spdiags, SparseEfficiencyWarning
 
 import numpy as np
@@ -144,9 +143,9 @@ class TestFactorization(_DeprecationAccept):
             A = A.todense()
             if not do_recip:
                 R = 1.0/R
-            R = matrix(diag(R))
-            P = eye(A.shape[0])[P,:]
-            Q = eye(A.shape[1])[:,Q]
+            R = np.matrix(np.diag(R))
+            P = np.eye(A.shape[0])[P,:]
+            Q = np.eye(A.shape[1])[:,Q]
 
             assert_array_almost_equal(P*R*A*Q,L*U)
 
@@ -165,9 +164,9 @@ class TestFactorization(_DeprecationAccept):
             A = A.todense()
             if not do_recip:
                 R = 1.0/R
-            R = matrix(diag(R))
-            P = eye(A.shape[0])[P,:]
-            Q = eye(A.shape[1])[:,Q]
+            R = np.matrix(np.diag(R))
+            P = np.eye(A.shape[0])[P,:]
+            Q = np.eye(A.shape[1])[:,Q]
 
             assert_array_almost_equal(P*R*A*Q,L*U)
 
@@ -185,9 +184,9 @@ class TestFactorization(_DeprecationAccept):
             A = A.todense()
             if not do_recip:
                 R = 1.0/R
-            R = matrix(diag(R))
-            P = eye(A.shape[0])[P,:]
-            Q = eye(A.shape[1])[:,Q]
+            R = np.matrix(np.diag(R))
+            P = np.eye(A.shape[0])[P,:]
+            Q = np.eye(A.shape[1])[:,Q]
 
             assert_array_almost_equal(P*R*A*Q,L*U)
 
@@ -206,9 +205,9 @@ class TestFactorization(_DeprecationAccept):
             A = A.todense()
             if not do_recip:
                 R = 1.0/R
-            R = matrix(diag(R))
-            P = eye(A.shape[0])[P,:]
-            Q = eye(A.shape[1])[:,Q]
+            R = np.matrix(np.diag(R))
+            P = np.eye(A.shape[0])[P,:]
+            Q = np.eye(A.shape[1])[:,Q]
 
             assert_array_almost_equal(P*R*A*Q,L*U)
 
@@ -221,9 +220,9 @@ class TestFactorization(_DeprecationAccept):
                                      [0, 1], 4, 5))
         real_matrices.append(spdiags([[1, 2, 3, 4, 5], [6, 5, 8, 9, 10]],
                                      [0, 2], 5, 5))
-        real_matrices.append(rand(3,3))
-        real_matrices.append(rand(5,4))
-        real_matrices.append(rand(4,5))
+        real_matrices.append(np.random.rand(3,3))
+        real_matrices.append(np.random.rand(5,4))
+        real_matrices.append(np.random.rand(4,5))
 
         self.real_matrices = [csc_matrix(x).astype('d')
                               for x in real_matrices]

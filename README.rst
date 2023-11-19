@@ -104,9 +104,10 @@ or if you have write privileges:
 Testing
 -------
 
-After installation, you can launch the test suite from the source directory
-(you will need to have the ``pytest`` package installed):
+After installation, you can launch the test suite from outside the source
+directory (you will need to have the ``pytest`` package installed):
 
 ::
 
-    pytest scikits/umfpack
+   pip install pytest
+   pytest --pyargs scikits.umfpack

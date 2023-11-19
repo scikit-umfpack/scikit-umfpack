@@ -1,0 +1,86 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+defaults:
+  run:
+    shell: bash
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read # to fetch code (actions/checkout)
+
+jobs:
+  ubuntu:
+    if: "github.repository == 'scikit-umfpack/scikit-umfpack'"
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+    - uses: actions/setup-python@65d7f2d534ac1bc67fcd62888c5f4f3d2cb2b236 # v4.7.1
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies from PyPI
+      run: |
+        # We're doing an isolated wheel build below, so only install the
+        # minimal dependencies needed to build a wheel and run the tests.
+        python -m pip install build pytest
+
+    - name: Install Suitesparse and SWIG
+      run: |
+        sudo apt install libsuitesparse-dev swig
+
+    - name: Build a wheel
+      run: |
+        python -m build --wheel
+        pip install dist/scikit*.whl
+
+    - name: Run test suite
+      run: |
+        cd docs
+        pytest --pyargs scikits.umfpack
+
+  conda-forge:
+    if: "github.repository == 'scikit-umfpack/scikit-umfpack'"
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+    - name: Setup Conda environment
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        python-version: '3.12'
+        channels: conda-forge
+        channel-priority: true
+        activate-environment: scikit-umfpack-dev
+        use-only-tar-bz2: false
+        miniforge-variant: Mambaforge
+        miniforge-version: latest
+        use-mamba: true
+
+    - name: Update Conda Environment
+      run: |
+        mamba env update -n scikit-umfpack-dev -f environment.yml
+
+    - name: Build a wheel
+      shell: bash -el {0}
+      run: |
+        conda activate scikit-umfpack-dev
+        python -m build --no-isolation
+        pip install dist/scikit*.whl --no-deps
+
+    - name: Run test suite
+      shell: bash -el {0}
+      run: |
+        conda activate scikit-umfpack-dev
+        cd docs
+        pytest --pyargs scikits.umfpack

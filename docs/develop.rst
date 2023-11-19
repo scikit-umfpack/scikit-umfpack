@@ -15,17 +15,33 @@ or if you have write privileges::
 
   git clone git@github.com:scikit-umfpack/scikit-umfpack.git
 
+Editable install
+----------------
+
+The editable install requires ``meson-python``::
+
+  pip install meson-python
+
+Then (see `meson editable installs documentation
+<https://mesonbuild.com/meson-python/how-to-guides/editable-installs.html>`_)::
+
+  pip install --no-build-isolation -e .
+
 Testing
 -------
 
-After installation, you can launch the test suite from outside the
-source directory (you will need to have the ``nose`` package installed)::
+``pytest`` is required to run the test suite::
 
-    nosetests -v scikits.umfpack
+  pip install pytest
+
+After completing the editable install command, run::
+
+  pytest
 
 Building documentation
 ----------------------
 
-To build the documentation, do::
+To build and view the documentation, do::
 
-    python setup.py build_ext -i build_sphinx
+  cd docs && make html && cd ..
+  firefox docs/_build/html/index.html
