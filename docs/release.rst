@@ -44,6 +44,7 @@ Release Tasks
 
    - in ``meson.build``
    - in ``pyproject.toml``
+   - in ``docs/conf.py``
 
 #. Regenerate and review the documentation::
 
@@ -70,7 +71,7 @@ Release Tasks
 #. Upload to `testpypi`_ and test::
 
      python3 -m build
-     twine upload -r testpypi dist/scikit-umfpack-<version>.tar.gz
+     twine upload -r testpypi dist/scikit_umfpack-<version>.tar.gz
 
    Note: if the upload fails with `This filename has previously been used, you
    should use a different version.`, just change the version (see step 2)
@@ -96,7 +97,7 @@ Release Tasks
    - Do::
 
        python3 -m build
-       twine upload dist/scikit-umfpack-<version>.tar.gz
+       twine upload dist/scikit_umfpack-<version>.tar.gz
 
    - Test::
 
