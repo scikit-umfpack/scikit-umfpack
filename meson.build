@@ -1,7 +1,7 @@
 project(
   'scikits.umfpack',
   'c',
-  version: '0.4.0.dev0',
+  version: '0.4.0',
   license: 'BSD-3',
   default_options: [
     'c_std=c99',
