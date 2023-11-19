@@ -22,10 +22,10 @@ Release Tasks
    Then register your accounts::
 
      # testpypi
-     python setup.py register -r https://testpypi.python.org/pypi
+     python3 setup.py register -r https://testpypi.python.org/pypi
 
      # pypi
-     python setup.py register
+     python3 setup.py register
 
    To be able to upload to pypi/testpypi without sending your password in plain
    text, install `twine`_. An upload is then done simply by::
@@ -42,57 +42,49 @@ Release Tasks
 
 #. Bump version number:
 
-   - in ``setup.py``
-   - in ``docs/conf.py``
+   - in ``meson.build``
+   - in ``pyproject.toml``
 
 #. Regenerate and review the documentation::
 
-     python setup.py build_ext -i build_sphinx
-     firefox build/sphinx/html/index.html
+     cd docs && make html && cd ..
+     firefox docs/_build/html/index.html
 
 #. Install and test the git version that is to be released. In the git
    repository, do::
 
-     python setup.py install --user
+     pip install .
+     cd docs
+     pytest --pyargs scikits.umfpack
      cd ..
-     nosetests -v scikits.umfpack
-     cd scikit-umfpack
 
 #. Create a source distribution tarball, install it and test it::
 
-     python setup.py sdist
-     # unpack it, cd to it, then:
-     python setup.py install --user
-     cd ..
-     nosetests -v scikits.umfpack
+     pip install build
+     python3 -m build
+
+   Unpack the source tarball, cd to it, and repeat the previous step.
 
 #. If OK, merge the version branch.
 
 #. Upload to `testpypi`_ and test::
 
-     python setup.py sdist
+     python3 -m build
      twine upload -r testpypi dist/scikit-umfpack-<version>.tar.gz
 
    Note: if the upload fails with `This filename has previously been used, you
-   should use a different version.`, just change the version in ``setup.py``
+   should use a different version.`, just change the version (see step 2)
    to another value.
 
-   Create a test install using `virtualenv`_::
+   Create a test install using `venv`_::
 
-     cd tmp/
+     python3 -m venv venv
+     source venv/bin/activate
 
-     unset PYTHONPATH
+     python3 -m pip install -U -i --pre https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ scikit-umfpack
 
-     virtualenv test-umfpack
-
-     cd test-umfpack
-     source bin/activate
-
-     python -m pip install --upgrade pip
-     pip install nose numpy scipy
-     pip install --no-deps --upgrade --pre -i https://testpypi.python.org/pypi scikit-umfpack
-
-     nosetests -v scikits.umfpack
+     python3 -m pip install pytest
+     pytest --pyargs scikits.umfpack
 
      deactivate
 
@@ -100,36 +92,25 @@ Release Tasks
 
 #. Upload to `pypi`_:
 
-   - Check the version numbers in ``setup.py`` and ``docs/conf.py``
-   - Change ISRELEASED in ``setup.py`` to True
+   - Check the version numbers (see step 2).
    - Do::
 
-
-       python setup.py sdist
+       python3 -m build
        twine upload dist/scikit-umfpack-<version>.tar.gz
 
-   - Change ISRELEASED in ``setup.py`` to False
-   - For testing, see the previous step.
+   - Test::
+
+     python3 -m venv venv
+     source venv/bin/activate
+
+     python3 -m pip install -U scikit-umfpack
+
+     python3 -m pip install pytest
+     pytest --pyargs scikits.umfpack
+
+     deactivate
 
 #. Update gh-pages::
 
      ./docs/do-gh-pages.sh
      git push -f origin gh-pages
-
-#. If wheels are available for the released version, upload them also using
-   `twine`_.
-
-#. The wheels from https://github.com/scikit-umfpack/scikit-umfpack-wheels can
-   be uploaded by
-   https://github.com/MacPython/terryfy/blob/master/wheel-uploader script -
-   save it to the scikit-umfpack directory, and change permissions to make it
-   executable. Then, for example, upload to `testpypi`_::
-
-     VERSION=0.3.1
-     CDN_URL=https://3f23b170c54c2533c070-1c8a9b3114517dc5fe17b7c3f8c63a43.ssl.cf2.rackcdn.com
-     ./wheel-uploader -u $CDN_URL -v -w ./wheels -t all -r testpypi scikit_umfpack $VERSION
-
-
-   and to `pypi`_::
-
-     ./wheel-uploader -u $CDN_URL -v -w ./wheels -t all scikit_umfpack $VERSION

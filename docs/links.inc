@@ -12,4 +12,4 @@
 .. _testpypi: https://testpypi.python.org/pypi
 .. _twine: https://pypi.python.org/pypi/twine
 
-.. _virtualenv: https://virtualenv.pypa.io
+.. _venv: https://docs.python.org/3/library/venv.html
