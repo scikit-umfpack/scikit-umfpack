@@ -51,7 +51,12 @@ jobs:
 
   conda-forge:
     if: "github.repository == 'scikit-umfpack/scikit-umfpack'"
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.platform }}
+    strategy:
+      # Ensure that a wheel builder finishes even if another fails
+      fail-fast: false
+      matrix:
+        platform: [ubuntu-latest, macos-latest]
     steps:
     - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
