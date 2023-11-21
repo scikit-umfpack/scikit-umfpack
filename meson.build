@@ -19,7 +19,10 @@ blas_deps = []
 if host_machine.system() == 'darwin'
   blas_deps = [dependency('Accelerate')]
 else
-  blas_deps = [cc.find_library('openblas', required : false)]
+  blas_deps = [dependency('openblas', required : false)]  # try with pkg-config first
+  if not blas_deps[0].found()
+    blas_deps = [cc.find_library('openblas', required : false)]
+  endif
 endif
 if not blas_deps[0].found()
     blas_deps = [cc.find_library('blas')]
