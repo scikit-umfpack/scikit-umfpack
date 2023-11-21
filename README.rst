@@ -33,55 +33,75 @@ References
        Mathematical Software, 30(3), 2004, pp. 377--380.
        https://doi.org/10.1145/1024074.1024080
 
-Dependencies
-============
-
-scikit-umfpack depends on NumPy, SciPy, SuiteSparse, and swig is a
-build-time dependency.
-
-Building SuiteSparse
---------------------
-
-SuiteSparse may be available from your package manager or as a prebuilt
-shared library. If that is the case use that if possible. Installation
-on Ubuntu 14.04 can be achieved with
-
-::
-
-    sudo apt-get install libsuitesparse-dev
-
-Otherwise, you will need to build from source. Unfortunately,
-SuiteSparse's makefiles do not support building a shared library out of
-the box. You may find `Stefan Fuertinger instructions
-helpful <http://fuertinger.lima-city.de/research.html#building-numpy-and-scipy>`__.
-
-Furthmore, building METIS-4.0, an optional but important compile time
-dependency of SuiteSparse, has problems on newer GCCs. This `patch and
-instructions <http://www.math-linux.com/mathematics/linear-systems/article/how-to-patch-metis-4-0-error-conflicting-types-for-__log2>`__
-from Nadir Soualem are helpful for getting a working METIS build.
-
-Otherwise, I commend you to the documentation.
-
 Installation
 ============
 
 .. include-start
 
-Releases of scikit-umfpack can be installed using ``pip``. For a system-wide
-installation run::
+Releases of scikit-umfpack can be installed from source using ``pip``, or with
+a package manager like ``conda`` . To install from source, first ensure the
+dependencies described in the next section are installed, then run::
 
-  pip install --upgrade scikit-umfpack
+  pip install scikit-umfpack
 
-or for a user installation run ::
+To install scikit-umfpack from its source code directory, run in the root of
+a clone of the Git repository::
 
-  pip install --upgrade --user scikit-umfpack
+  pip install .
 
-To install scikit-umfpack from its source code directory, run in that
-directory (``--user`` means a user installation)::
+Dependencies
+------------
 
-  pip install --upgrade --user .
+scikit-umfpack depends on NumPy, SciPy, and SuiteSparse.
+
+To build scikit-umfpack, the following are needed:
+- a C compiler
+- a BLAS library with CBLAS symbols (e.g., OpenBLAS, Accelerate on macOS, or reference BLAS)
+- NumPy
+- SuiteSparse (which contains UMFPACK)
+- SWIG
+
+pkg-config is an optional dependency, if it's installed it may be used to
+detect a BLAS library.
+
+SuiteSparse cannot be installed from PyPI, however it will likely be available
+from your package manager of choice. E.g., installing on Ubuntu 22.04 can be
+achieved with::
+
+    sudo apt-get install libsuitesparse-dev
+
+or from Conda-forge on any supported OS with::
+
+    conda install suitesparse
+
+SuiteSparse can also be built from source, see the instructions in the README
+of the `SuiteSparse repository <https://github.com/DrTimothyAldenDavis/SuiteSparse>`__.
+
+
+Detection of UMFPACK
+''''''''''''''''''''
+
+During the build, scikit-umfpack tries to automatically detect the UMFPACK
+shared library and headers. In case SuiteSparse is installed in a non-standard
+location, this autodetection may fail. If that happens, it is possible to
+provide the paths to the library and include directories in a config file (a
+Meson machine file). This file should contain absolute paths. For example, for
+a conda env on Windows, it may look like:
+
+.. code:: ini
+
+    [properties]
+    umfpack-libdir = 'C:\Users\micromamba\envs\scikit-umfpack-dev\Library\lib'
+    umfpack-includedir = 'C:\Users\micromamba\envs\scikit-umfpack-dev\Library\include\suitesparse'
+
+If that file is named ``nativefile.ini``, then the ``pip`` invocation should
+look like (note that ``$PWD`` ensures an absolute path to the native file is
+used)::
+
+    pip install . -Csetup-args=--native-file=$PWD/nativefile.ini
 
 .. include-end
+
 
 Development
 ===========
