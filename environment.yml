@@ -18,3 +18,5 @@ dependencies:
   - swig
   - build
   - pytest
+  - openblas
+  - pkg-config
