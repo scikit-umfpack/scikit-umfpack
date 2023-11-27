@@ -82,7 +82,7 @@ Release Tasks
      python3 -m venv venv
      source venv/bin/activate
 
-     python3 -m pip install -U -i --pre https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ scikit-umfpack
+     python3 -m pip install -U -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ --pre scikit-umfpack
 
      python3 -m pip install pytest
      pytest --pyargs scikits.umfpack
@@ -101,15 +101,15 @@ Release Tasks
 
    - Test::
 
-     python3 -m venv venv
-     source venv/bin/activate
+       python3 -m venv venv
+       source venv/bin/activate
 
-     python3 -m pip install -U scikit-umfpack
+       python3 -m pip install -U scikit-umfpack
 
-     python3 -m pip install pytest
-     pytest --pyargs scikits.umfpack
+       python3 -m pip install pytest
+       pytest --pyargs scikits.umfpack
 
-     deactivate
+       deactivate
 
 #. Update gh-pages::
 
