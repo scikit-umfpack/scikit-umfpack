@@ -21,8 +21,9 @@ from __future__ import division, print_function, absolute_import
 from warnings import warn
 import sys
 import numpy as np
+import scipy.sparse as sparse
 from numpy import asarray
-from scipy.sparse import (isspmatrix_csc, isspmatrix_csr, isspmatrix,
+from scipy.sparse import (isspmatrix_csc, isspmatrix_csr, issparse,
                           SparseEfficiencyWarning, csc_matrix, hstack)
 
 from .umfpack import UmfpackContext, UMFPACK_A
@@ -179,7 +180,14 @@ class UmfpackLU(object):
     """
 
     def __init__(self, A):
-        if not (isspmatrix_csc(A) or isspmatrix_csr(A)):
+        if not (
+            isspmatrix_csc(A)
+            or isspmatrix_csr(A)
+            or (
+                hasattr(sparse, "csc_array")
+                and (isinstance(A, sparse.csc_array) or isinstance(A, sparse.csr_array))
+            )
+        ):
             A = csc_matrix(A)
             warn('spsolve requires A be CSC or CSR matrix format',
                     SparseEfficiencyWarning)
@@ -227,12 +235,11 @@ class UmfpackLU(object):
             Solution to the matrix equation
 
         """
-        if isspmatrix(b):
+        if issparse(b):
             b = b.toarray()
 
         if b.shape[0] != self._A.shape[1]:
             raise ValueError("Shape of b is not compatible with that of A")
-
         b_arr = asarray(b, dtype=self._A.dtype).reshape(b.shape[0], -1)
         x = np.zeros((self._A.shape[0], b_arr.shape[1]), dtype=self._A.dtype)
         for j in range(b_arr.shape[1]):

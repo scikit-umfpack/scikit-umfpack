@@ -472,10 +472,12 @@ class UmfpackContext(Struct):
     # 01.03.2006
     def _getIndx(self, mtx):
 
-        if sp.isspmatrix_csc(mtx):
+        if (sp.isspmatrix_csc(mtx) or 
+            (hasattr(sp, 'csc_array') and isinstance(mtx, sp.csc_array))):
             indx = mtx.indices
             self.isCSR = 0
-        elif sp.isspmatrix_csr(mtx):
+        elif (sp.isspmatrix_csr(mtx) or 
+              (hasattr(sp, 'csr_array') and isinstance(mtx, sp.csr_array))):
             indx = mtx.indices
             self.isCSR = 1
         else:
