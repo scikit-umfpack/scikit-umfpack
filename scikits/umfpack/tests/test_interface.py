@@ -136,10 +136,9 @@ class TestSolvers(unittest.TestCase):
         assert_allclose(A2, A.A, atol=1e-13)
 
 class TestSolversWithArrays(unittest.TestCase):
-    """Same tests as above, but using the csc_array interface. 
-    
-    Key difference is that sparse arrays support matrix multiplication with
-    the @ operator rather than the * operator.
+    """Same tests as above, but using the csc_array interface. Key difference 
+    is that sparse arrays support matrix multiplication with the @ operator
+    rather than the * operator.
     """
 
     def setUp(self):

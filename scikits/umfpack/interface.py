@@ -240,7 +240,6 @@ class UmfpackLU(object):
 
         if b.shape[0] != self._A.shape[1]:
             raise ValueError("Shape of b is not compatible with that of A")
-        
         b_arr = asarray(b, dtype=self._A.dtype).reshape(b.shape[0], -1)
         x = np.zeros((self._A.shape[0], b_arr.shape[1]), dtype=self._A.dtype)
         for j in range(b_arr.shape[1]):
