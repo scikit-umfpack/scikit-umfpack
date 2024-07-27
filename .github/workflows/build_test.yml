@@ -7,6 +7,11 @@ on:
   pull_request:
     branches:
       - master
+  schedule:
+    # Run at midnight on each Saturday
+    - cron:  '0 0 * * 6'
+  workflow_dispatch:
+    workflow: "*"
 
 defaults:
   run:
@@ -21,7 +26,6 @@ permissions:
 
 jobs:
   ubuntu:
-    if: "github.repository == 'scikit-umfpack/scikit-umfpack'"
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
@@ -50,7 +54,6 @@ jobs:
         pytest --pyargs scikits.umfpack
 
   conda-forge:
-    if: "github.repository == 'scikit-umfpack/scikit-umfpack'"
     runs-on: ${{ matrix.platform }}
     strategy:
       # Ensure that a wheel builder finishes even if another fails
