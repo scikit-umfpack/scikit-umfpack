@@ -2,7 +2,7 @@
 build-backend = 'mesonpy'
 requires = [
     'meson-python',
-    'numpy',
+    'numpy<2.0.0',
 ]
 
 [project]
@@ -15,7 +15,7 @@ maintainers = [
 ]
 requires-python = ">=3.9"
 dependencies = [
-    "numpy",
+    "numpy<2.0.0",
     "scipy",
 ]
 readme = "README.rst"
