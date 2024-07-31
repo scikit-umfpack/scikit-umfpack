@@ -12,9 +12,9 @@ dependencies:
   - meson
   - meson-python
   - ninja
-  - numpy
+  - numpy <2.0.0
   - scipy
-  - suitesparse
+  - suitesparse < 7.0.0
   - swig
   - build
   - pytest
