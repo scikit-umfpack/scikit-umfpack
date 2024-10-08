@@ -40,7 +40,8 @@ _try_incdirs = [
     '/opt/local/include/ufsparse',
     '/opt/local/include',
     '/sw/include',
-    '/usr/include/suitesparse'
+    '/usr/include/suitesparse',
+    '/opt/homebrew/include/suitesparse'
 ]
 suitesparse_incdirs = []
 umfpack_header_dirs = []
