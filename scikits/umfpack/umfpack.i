@@ -116,7 +116,7 @@ PyArrayObject *helper_getCArrayObject( PyObject *input, int type,
 #define ARRAY_IN( rtype, ctype, atype ) \
 %typemap( in ) (ctype *array) { \
   PyArrayObject *obj; \
-  obj = helper_getCArrayObject( $input, PyArray_##atype, 1, 1 ); \
+  obj = helper_getCArrayObject( $input, NPY_##atype, 1, 1 ); \
   if (!obj) return NULL; \
   $1 = (rtype *) obj->data; \
   Py_DECREF( obj ); \
@@ -129,7 +129,7 @@ PyArrayObject *helper_getCArrayObject( PyObject *input, int type,
 #define CONF_IN( arSize ) \
 %typemap( in ) (double conf [arSize]) { \
   PyArrayObject *obj; \
-  obj = helper_getCArrayObject( $input, PyArray_DOUBLE, 1, 1 ); \
+  obj = helper_getCArrayObject( $input, NPY_DOUBLE, 1, 1 ); \
   if (!obj) return NULL; \
   if ((obj->nd != 1) || (obj->dimensions[0] != arSize)) { \
     PyErr_SetString( PyExc_ValueError, "wrong Control/Info array size" ); \
