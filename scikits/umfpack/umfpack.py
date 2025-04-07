@@ -632,7 +632,7 @@ class UmfpackContext(Struct):
     def free_symbolic(self):
         """Free symbolic data"""
         if self._symbolic is not None:
-            self.funs.free_symbolic(self._symbolic)
+            # self.funs.free_symbolic(self._symbolic)
             self._symbolic = None
 
     ##
@@ -641,7 +641,7 @@ class UmfpackContext(Struct):
     def free_numeric(self):
         """Free numeric data"""
         if self._numeric is not None:
-            self.funs.free_numeric(self._numeric)
+            # self.funs.free_numeric(self._numeric)
             self._numeric = None
             self.mtx = None
 
@@ -845,8 +845,24 @@ class UmfpackContext(Struct):
 
         """
 
+        if isinstance(mtx, sp.coo_matrix):
+            if (mtx.row.dtype == np.int64) or (mtx.col.dtype == np.int64):
+                ind64 = True
+            else:
+                ind64 = False
+        else:
+            if (mtx.indices.dtype == np.int64) or (mtx.indptr.dtype == np.int64):
+                ind64 = True
+            else:
+                ind64 = False
+
         # this should probably be changed
         mtx = mtx.tocsc()
+
+        if ind64:
+            mtx.indices = mtx.indices.astype(np.int64)
+            mtx.indptr = mtx.indptr.astype(np.int64)
+
         self.numeric(mtx)
 
         # first find out how much space to reserve
