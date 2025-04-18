@@ -17,8 +17,6 @@
 
 %feature("autodoc", "1");
 
-#include <umfpack.h>
-
 %{
 #ifndef SuiteSparse_long
     #define SuiteSparse_long UF_long
@@ -215,25 +213,6 @@ CONF_IN( UMFPACK_INFO )
     double Info [ANY]
 };
 
-%include <umfpack.h>
-
-#if UMFPACK_MAIN_VERSION < 6
-  %include <umfpack_solve.h>
-  %include <umfpack_defaults.h>
-  %include <umfpack_triplet_to_col.h>
-  %include <umfpack_col_to_triplet.h>
-  %include <umfpack_transpose.h>
-  %include <umfpack_scale.h>
-
-  %include <umfpack_report_symbolic.h>
-  %include <umfpack_report_numeric.h>
-  %include <umfpack_report_info.h>
-  %include <umfpack_report_control.h>
-#endif
-
-/*
-  The order is important below!
-*/
 
 OPAQUE_ARGOUT( void * )
 %apply  void ** opaque_argout {
@@ -241,21 +220,6 @@ OPAQUE_ARGOUT( void * )
     void **Numeric
 }
 
-#if UMFPACK_MAIN_VERSION < 6
-  %include <umfpack_symbolic.h>
-  %include <umfpack_numeric.h>
-#endif
-
-OPAQUE_ARGINOUT( void * )
-%apply  void ** opaque_arginout {
-    void **Symbolic,
-    void **Numeric
-}
-
-#if UMFPACK_MAIN_VERSION < 6
-  %include <umfpack_free_symbolic.h>
-  %include <umfpack_free_numeric.h>
-#endif
 
 /*
  * wnbell - attempt to get L,U,P,Q out
@@ -283,9 +247,6 @@ OPAQUE_ARGINOUT( void * )
     SuiteSparse_long *nz_udiag
 };
 
-#if UMFPACK_MAIN_VERSION < 6
-  %include <umfpack_get_lunz.h>
-#endif
 
 ARRAY_IN( double, double, DOUBLE )
 %apply double *array {
@@ -331,8 +292,45 @@ ARRAY_IN( SuiteSparse_long, SuiteSparse_long, INT64 )
 };
 %apply long *OUTPUT { SuiteSparse_long *do_recip};
 
-#if UMFPACK_MAIN_VERSION < 6
-  %include <umfpack_get_numeric.h>
-#endif
+/* The *_free_* functions are the only ones where arguments void **Symbolic and
+void **Numeric are not outputs. Ignore these when importing the file then
+redeclare them below after applying arginout instead.*/
+
+%define IGNOREALL(u)
+%ignore umfpack_di_ ## u;
+%ignore umfpack_zi_ ## u;
+%ignore umfpack_dl_ ## u;
+%ignore umfpack_zl_ ## u;
+%enddef
+
+%define UNIGNOREALL(u)
+%rename("%s") umfpack_di_ ## u;
+%rename("%s") umfpack_zi_ ## u;
+%rename("%s") umfpack_dl_ ## u;
+%rename("%s") umfpack_zl_ ## u;
+%enddef
+
+IGNOREALL(free_symbolic)
+IGNOREALL(free_numeric)
+
+%include <umfpack.h>
+
+UNIGNOREALL(free_symbolic)
+UNIGNOREALL(free_numeric)
+
+OPAQUE_ARGINOUT( void * )
+%apply  void ** opaque_arginout {
+    void **Symbolic,
+    void **Numeric
+}
+
+void umfpack_di_free_symbolic(void **Symbolic);
+void umfpack_zi_free_symbolic(void **Symbolic);
+void umfpack_dl_free_symbolic(void **Symbolic);
+void umfpack_zl_free_symbolic(void **Symbolic);
+void umfpack_di_free_numeric(void **Numeric);
+void umfpack_zi_free_numeric(void **Numeric);
+void umfpack_dl_free_numeric(void **Numeric);
+void umfpack_zl_free_numeric(void **Numeric);
 
 #endif // SWIGPYTHON
