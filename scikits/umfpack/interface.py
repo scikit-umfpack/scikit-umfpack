@@ -276,7 +276,8 @@ class UmfpackLU(object):
                     np.reciprocal(self._R, out=self._R)
 
             # Conform to scipy.sparse.splu convention on permutation matrices
-            self._P = self._P[self._P]
+            self._P = np.argsort(self._P)
+            self._Q = np.argsort(self._Q)
 
     @property
     def shape(self):
