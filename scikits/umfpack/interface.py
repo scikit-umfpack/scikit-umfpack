@@ -172,7 +172,7 @@ class UmfpackLU(object):
 
     We can reassemble the original matrix:
 
-    >>> (Pr.T * R * (lu.L * lu.U) * Pc.T).A
+    >>> (R * Pr.T * (lu.L * lu.U) * Pc.T).A
     array([[ 1.,  2.,  0.,  4.],
            [ 1.,  0.,  0.,  1.],
            [ 1.,  0.,  2.,  1.],
