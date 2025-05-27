@@ -19,6 +19,23 @@
 
 %feature("autodoc", "1");
 
+#ifndef SK_UMFPACK_SINGLE_HEADER
+
+#include <SuiteSparse_config.h>
+
+/*SuiteSparse_long is deprecated from Suitesparse > 6.0.0 (Nov. 2022)
+  The same update introduced the UMFPACK single header.*/
+%{
+#ifndef SuiteSparse_long
+    #define SuiteSparse_long UF_long
+#endif
+%}
+
+typedef int64_t SuiteSparse_long;
+typedef SuiteSparse_long UF_long;
+
+#endif
+
 %init %{
     import_array();
 %}
@@ -152,6 +169,18 @@ PyArrayObject *helper_getCArrayObject( PyObject *input, int type,
   $result = helper_appendToTuple( $result, obj ); \
 };
 
+ARRAY_IN( int, const int, INT )
+%apply const int *array {
+    const int Ap [ ],
+    const int Ai [ ]
+};
+
+ARRAY_IN( long, const long, LONG )
+%apply const long *array {
+    const long Ap [ ],
+    const long Ai [ ]
+};
+
 ARRAY_IN( int32_t, const int32_t, INT32 )
 %apply const int32_t *array {
     const int32_t Ap [ ],
@@ -190,6 +219,30 @@ CONF_IN( UMFPACK_INFO )
     double Info [ANY]
 };
 
+#ifndef SK_UMFPACK_SINGLE_HEADER
+  %include <umfpack.h>
+  %include <umfpack_solve.h>
+  %include <umfpack_defaults.h>
+  %include <umfpack_triplet_to_col.h>
+  %include <umfpack_col_to_triplet.h>
+  %include <umfpack_transpose.h>
+  %include <umfpack_scale.h>
+
+  %include <umfpack_report_symbolic.h>
+  %include <umfpack_report_numeric.h>
+  %include <umfpack_report_info.h>
+  %include <umfpack_report_control.h>
+#endif
+
+/*
+  The order is important below!
+
+  **Symbolic and **Numeric are output arguments except when they are freed
+
+  For the single-header, this is dealt with by ignoring the *_free_* declarations
+  when running %import <umfpack.h>, then re-declaring them afterwards with
+  output arguments.
+*/
 
 OPAQUE_ARGOUT( void * )
 %apply  void ** opaque_argout {
@@ -197,12 +250,50 @@ OPAQUE_ARGOUT( void * )
     void **Numeric
 }
 
+#ifndef SK_UMFPACK_SINGLE_HEADER
+  %include <umfpack_symbolic.h>
+  %include <umfpack_numeric.h>
+
+  OPAQUE_ARGINOUT( void * )
+  %apply  void ** opaque_arginout {
+      void **Symbolic,
+      void **Numeric
+  }
+
+  %include <umfpack_free_symbolic.h>
+  %include <umfpack_free_numeric.h>
+#else
+  %define IGNOREALL(u)
+  %ignore umfpack_di_ ## u;
+  %ignore umfpack_zi_ ## u;
+  %ignore umfpack_dl_ ## u;
+  %ignore umfpack_zl_ ## u;
+  %enddef
+
+  %define UNIGNOREALL(u)
+  %rename("%s") umfpack_di_ ## u;
+  %rename("%s") umfpack_zi_ ## u;
+  %rename("%s") umfpack_dl_ ## u;
+  %rename("%s") umfpack_zl_ ## u;
+  %enddef
+
+  // These will be un-ignored and redeclared after %include <umfpack.h>
+  IGNOREALL(free_symbolic)
+  IGNOREALL(free_numeric)
+#endif
 
 /*
  * wnbell - attempt to get L,U,P,Q out
  */
 %include "typemaps.i"
-%apply long  *OUTPUT {
+%apply int *OUTPUT {
+    int *lnz,
+    int *unz,
+    int *n_row,
+    int *n_col,
+    int *nz_udiag
+};
+%apply int32_t *OUTPUT {
     int32_t *lnz,
     int32_t *unz,
     int32_t *n_row,
@@ -216,7 +307,7 @@ OPAQUE_ARGOUT( void * )
     long *n_col,
     long *nz_udiag
 };
-%apply int *OUTPUT {
+%apply int64_t *OUTPUT {
     int64_t *lnz,
     int64_t *unz,
     int64_t *n_row,
@@ -224,6 +315,9 @@ OPAQUE_ARGOUT( void * )
     int64_t *nz_udiag
 };
 
+#ifndef SK_UMFPACK_SINGLE_HEADER
+  %include <umfpack_get_lunz.h>
+#endif
 
 ARRAY_IN( double, double, DOUBLE )
 %apply double *array {
@@ -236,6 +330,17 @@ ARRAY_IN( double, double, DOUBLE )
     double Rs [ ]
 };
 
+ARRAY_IN( int, int, INT )
+%apply int *array {
+    int Lp [ ],
+    int Lj [ ],
+    int Up [ ],
+    int Ui [ ],
+    int P [ ],
+    int Q [ ]
+};
+%apply int  *OUTPUT { int *do_recip};
+
 ARRAY_IN( int32_t, int32_t, INT32 )
 %apply int32_t *array {
     int32_t Lp [ ],
@@ -246,6 +351,17 @@ ARRAY_IN( int32_t, int32_t, INT32 )
     int32_t Q [ ]
 };
 %apply int32_t  *OUTPUT { int32_t *do_recip};
+
+ARRAY_IN( long, long, LONG )
+%apply long *array {
+    long Lp [ ],
+    long Lj [ ],
+    long Up [ ],
+    long Ui [ ],
+    long P [ ],
+    long Q [ ]
+};
+%apply long *OUTPUT { long *do_recip};
 
 ARRAY_IN( int64_t, int64_t, INT64 )
 %apply int64_t *array {
@@ -258,45 +374,28 @@ ARRAY_IN( int64_t, int64_t, INT64 )
 };
 %apply int64_t *OUTPUT { int64_t *do_recip};
 
-/* The *_free_* functions are the only ones where arguments void **Symbolic and
-void **Numeric are not outputs. Ignore these when importing the file then
-redeclare them below after applying arginout instead.*/
+#ifndef SK_UMFPACK_SINGLE_HEADER
+  %include <umfpack_get_numeric.h>
+#else
 
-%define IGNOREALL(u)
-%ignore umfpack_di_ ## u;
-%ignore umfpack_zi_ ## u;
-%ignore umfpack_dl_ ## u;
-%ignore umfpack_zl_ ## u;
-%enddef
+  %include <umfpack.h>
 
-%define UNIGNOREALL(u)
-%rename("%s") umfpack_di_ ## u;
-%rename("%s") umfpack_zi_ ## u;
-%rename("%s") umfpack_dl_ ## u;
-%rename("%s") umfpack_zl_ ## u;
-%enddef
+  UNIGNOREALL(free_symbolic)
+  UNIGNOREALL(free_numeric)
 
-IGNOREALL(free_symbolic)
-IGNOREALL(free_numeric)
+  OPAQUE_ARGINOUT( void * )
+  %apply  void ** opaque_arginout {
+      void **Symbolic,
+      void **Numeric
+  }
 
-%include <umfpack.h>
-
-UNIGNOREALL(free_symbolic)
-UNIGNOREALL(free_numeric)
-
-OPAQUE_ARGINOUT( void * )
-%apply  void ** opaque_arginout {
-    void **Symbolic,
-    void **Numeric
-}
-
-void umfpack_di_free_symbolic(void **Symbolic);
-void umfpack_zi_free_symbolic(void **Symbolic);
-void umfpack_dl_free_symbolic(void **Symbolic);
-void umfpack_zl_free_symbolic(void **Symbolic);
-void umfpack_di_free_numeric(void **Numeric);
-void umfpack_zi_free_numeric(void **Numeric);
-void umfpack_dl_free_numeric(void **Numeric);
-void umfpack_zl_free_numeric(void **Numeric);
-
+  void umfpack_di_free_symbolic(void **Symbolic);
+  void umfpack_zi_free_symbolic(void **Symbolic);
+  void umfpack_dl_free_symbolic(void **Symbolic);
+  void umfpack_zl_free_symbolic(void **Symbolic);
+  void umfpack_di_free_numeric(void **Numeric);
+  void umfpack_zi_free_numeric(void **Numeric);
+  void umfpack_dl_free_numeric(void **Numeric);
+  void umfpack_zl_free_numeric(void **Numeric);
+#endif
 #endif // SWIGPYTHON

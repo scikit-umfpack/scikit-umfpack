@@ -47,7 +47,7 @@ _umfpack_swig = custom_target('_umfpack_swig',
         '_umfpack.py',
     ],
     input: 'umfpack.i',
-    command: [swig, '-python'] + swig_inc_args + [
+    command: [swig, '-python'] + swig_defines + swig_inc_args + [
               '-o', '@OUTPUT0@', '-outdir', '@OUTDIR@', '@INPUT@'],
     install: true,
     install_dir: py.get_install_dir() / 'scikits/umfpack',  # need to install _umfpack.py
