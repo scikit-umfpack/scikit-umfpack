@@ -16,7 +16,7 @@ dependencies:
   - scipy
   - suitesparse < 7.0.0
   - swig
-  - build
+  - python-build
   - pytest
   - openblas
   - pkg-config
