@@ -15,22 +15,6 @@ cc = meson.get_compiler('c')
 
 swig = find_program('swig', required: true, native: true)
 
-blas_deps = []
-if host_machine.system() == 'darwin'
-  blas_deps = [dependency('Accelerate')]
-else
-  blas_deps = [dependency('openblas', required : false)]  # try with pkg-config first
-  if not blas_deps[0].found()
-    blas_deps = [cc.find_library('openblas', required : false)]
-  endif
-endif
-if not blas_deps[0].found()
-    blas_deps = [cc.find_library('blas')]
-    cblas_dep = cc.find_library('cblas', required : false)
-    if cblas_dep.found()
-        blas_deps += cblas_dep
-    endif
-endif
 
 # The list of paths here was taken over from numpy.distutils.system_info.py:
 _try_incdirs = [
@@ -87,6 +71,46 @@ if not umfpack_dep.found()
     dependencies: umfpack_lib,
     include_directories: umfpack_header_dirs,
   )
+endif
+
+# Check whether we have the single-header version. May break if multiple
+# versions installed in different places.
+
+swig_defines =[]
+single_header = not cc.has_header(
+  'umfpack_solve.h',
+  dependencies: umfpack_lib,
+  include_directories: umfpack_header_dirs)
+
+if single_header
+  message('Using single-header UMFPACK')
+  swig_defines += ['-DSK_UMFPACK_SINGLE_HEADER']
+else
+  message('Multiple-header UMFPACK found')
+endif
+
+blas_deps = []
+
+# The single-header version does not need to be linked against BLAS
+# This may have been from version 6.1.0 of UMFPACK (Jan 2023) as the changelog
+# says BLAS symbols no longer exposed to user applications.
+# Single header and int64_t is used from v6.0.0 (Nov 2022)
+if not single_header
+  if host_machine.system() == 'darwin'
+    blas_deps = [dependency('Accelerate')]
+  else
+    blas_deps = [dependency('openblas', required : false)]  # try with pkg-config first
+    if not blas_deps[0].found()
+      blas_deps = [cc.find_library('openblas', required : false)]
+    endif
+  endif
+  if not blas_deps[0].found()
+      blas_deps = [cc.find_library('blas')]
+      cblas_dep = cc.find_library('cblas', required : false)
+      if cblas_dep.found()
+          blas_deps += cblas_dep
+      endif
+  endif
 endif
 
 subdir('scikits')
