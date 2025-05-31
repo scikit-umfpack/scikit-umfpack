@@ -119,7 +119,7 @@ class TestSolvers(unittest.TestCase):
         assert_allclose((A*X).todense(), B.todense())
 
     def test_splu_lu(self):
-        A = csc_matrix([[1,2,0,4],[1,0,0,1],[1,0,2,1],[2,2,1,0.]])
+        A = csc_matrix([[1,2,0,4],[1,0,3,1],[1,0,2,1],[2,2,1,0.]])
 
         lu = um.splu(A)
 
@@ -233,7 +233,7 @@ class TestSolversWithArrays(unittest.TestCase):
         assert_allclose((A @ X).todense(), B.todense())
 
     def test_splu_lu(self):
-        A = csc_array([[1,2,0,4],[1,0,0,1],[1,0,2,1],[2,2,1,0.]])
+        A = csc_array([[1,2,0,4],[1,0,3,1],[1,0,2,1],[2,2,1,0.]])
 
         lu = um.splu(A)
 
