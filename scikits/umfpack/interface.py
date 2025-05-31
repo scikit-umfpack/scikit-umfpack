@@ -147,12 +147,12 @@ class UmfpackLU(object):
 
     The L and U factors are sparse matrices in CSC format:
 
-    >>> lu.L.A
+    >>> lu.L.toarray()
     array([[ 1. ,  0. ,  0. ,  0. ],
            [ 0. ,  1. ,  0. ,  0. ],
            [ 0. ,  0. ,  1. ,  0. ],
            [ 1. ,  0.5,  0.5,  1. ]])
-    >>> lu.U.A
+    >>> lu.U.toarray()
     array([[ 2.,  0.,  1.,  4.],
            [ 0.,  2.,  1.,  1.],
            [ 0.,  0.,  1.,  1.],
@@ -172,11 +172,19 @@ class UmfpackLU(object):
 
     We can reassemble the original matrix:
 
-    >>> (R * Pr.T * (lu.L * lu.U) * Pc.T).A
+    >>> (R * Pr.T * (lu.L * lu.U) * Pc.T).toarray()
     array([[ 1.,  2.,  0.,  4.],
            [ 1.,  0.,  0.,  1.],
            [ 1.,  0.,  2.,  1.],
            [ 2.,  2.,  1.,  0.]])
+
+    Note
+    ----
+    The permutation vectors ``perm_r`` and ``perm_c`` are the inverses of 
+    permutation vectors ``P`` and ``Q`` returned by lower-level 
+    ``UmfpackContext.lu()``. This is so that matrices Pr and Pc are 
+    reconstructed as shown above, for consistency with 
+    ``scipy.sparse.linalg.splu``.
     """
 
     def __init__(self, A):
