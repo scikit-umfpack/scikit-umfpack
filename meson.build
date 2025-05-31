@@ -71,17 +71,20 @@ if not umfpack_dep.found()
     dependencies: umfpack_lib,
     include_directories: umfpack_header_dirs,
   )
+  # Check whether we have the single-header version. May break if multiple
+  # versions installed in different places.
+  single_header = not cc.has_header(
+    'umfpack_solve.h',
+    dependencies: umfpack_dep,
+    include_directories: umfpack_header_dirs
+  )
+else
+  # pkg-config .pc files were only added to recent versions of suitesparse
+  single_header = true
 endif
 
-# Check whether we have the single-header version. May break if multiple
-# versions installed in different places.
 
 swig_defines =[]
-single_header = not cc.has_header(
-  'umfpack_solve.h',
-  dependencies: umfpack_lib,
-  include_directories: umfpack_header_dirs)
-
 if single_header
   message('Using single-header UMFPACK')
   swig_defines += ['-DSK_UMFPACK_SINGLE_HEADER']

@@ -26,6 +26,9 @@ if cc.get_id() == 'gcc'
        if fs.exists(_incdir)
            swig_inc_args += '-I' + _incdir
        endif
+       if fs.exists(_incdir / 'suitesparse')
+           swig_inc_args += '-I' + (_incdir / 'suitesparse')
+       endif
     endif
 elif cc.get_id() == 'clang'
     _clang_v = run_command([cc, '-v'], check: true).stderr().strip()
@@ -35,6 +38,9 @@ elif cc.get_id() == 'clang'
             _incdir = _bindir / '../include'
             if fs.exists(_incdir)
                 swig_inc_args += '-I' + _incdir
+            endif
+            if fs.exists(_incdir / 'suitesparse')
+                swig_inc_args += '-I' + (_incdir / 'suitesparse')
             endif
         endif
     endif
