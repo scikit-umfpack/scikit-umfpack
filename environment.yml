@@ -12,11 +12,11 @@ dependencies:
   - meson
   - meson-python
   - ninja
-  - numpy <2.0.0
+  - numpy
   - scipy
-  - suitesparse < 7.0.0
+  - suitesparse
   - swig
-  - build
+  - python-build
   - pytest
   - openblas
   - pkg-config
