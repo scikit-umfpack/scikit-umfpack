@@ -9,11 +9,9 @@ except Exception:
 print(incdir)
 '''], check: true).stdout().strip()
 
-# SWIG needs to find umfpack.h, so add all potential candidates
+# swig include is extracted from the umfpack dependency
+# in meson_swig.py
 swig_inc_args = []
-foreach _dir : suitesparse_incdirs
-    swig_inc_args += '-I' + _dir
-endforeach
 
 # This is a hack that gets at the location for conda envs (and perhaps other
 # types of envs), when building with conda compilers. We need proper SWIG
@@ -47,13 +45,14 @@ elif cc.get_id() == 'clang'
 endif
 # The above took care of all fixed directories. We also need the default
 # compiler search directories, but Meson doesn't expose those.
+
 _umfpack_swig = custom_target('_umfpack_swig',
     output: [
         '_umfpack_wrap.c',
         '_umfpack.py',
     ],
     input: 'umfpack.i',
-    command: [swig, '-python'] + swig_defines + swig_inc_args + [
+    command: [py, meson_swig, swig, '-python'] + swig_defines + swig_inc_args + [
               '-o', '@OUTPUT0@', '-outdir', '@OUTDIR@', '@INPUT@'],
     install: true,
     install_dir: py.get_install_dir() / 'scikits/umfpack',  # need to install _umfpack.py
