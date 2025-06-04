@@ -16,13 +16,16 @@ meson_info = Path("meson-info")
 with (meson_info / "intro-dependencies.json").open() as f:
     dependency_list = json.load(f)
 
-# cast to a dict
-dependencies = {dep["name"].lower(): dep for dep in dependency_list}
+# dict by dependency variable(s) name
+dependencies = {}
+for dep in dependency_list:
+    for name in dep["meson_variables"]:
+        dependencies[name] = dep
 
 # get umfpack dependency
-umfpack = dependencies.get("umfpack")
-if "umfpack" not in dependencies:
-    sys.exit(f"umfpack not found in dependencies: {', '.join(dependencies)}")
+umfpack = dependencies.get("umfpack_dep")
+if umfpack is None:
+    sys.exit(f"umfpack_dep not found in dependencies: {', '.join(dependencies)}")
 
 # load include directories from meson dep
 includes = []

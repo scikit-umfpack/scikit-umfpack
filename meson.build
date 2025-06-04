@@ -73,7 +73,6 @@ if not umfpack_dep.found()
       has_headers : ['umfpack.h']
   )
   umfpack_dep = declare_dependency(
-    name: 'UMFPACK',
     dependencies: umfpack_lib,
     include_directories: umfpack_header_dirs,
   )
