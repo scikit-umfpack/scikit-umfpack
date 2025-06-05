@@ -11,6 +11,11 @@ project(
 fs = import('fs')
 py = import('python').find_installation(pure: false)
 
+# wrapper around swig to extract includes from umfpack dependency
+# future version of meson should fix this:
+# https://github.com/mesonbuild/meson/issues/8334
+meson_swig = fs.copyfile('meson_swig.py')
+
 cc = meson.get_compiler('c')
 
 swig = find_program('swig', required: true, native: true)
