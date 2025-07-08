@@ -1,0 +1,6 @@
+﻿scikits.umfpack.spsolve
+=======================
+
+.. currentmodule:: scikits.umfpack
+
+.. autofunction:: spsolve

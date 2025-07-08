@@ -1,0 +1,6 @@
+scikits.umfpack.umfpack.UmfpackContext.strInfo
+==============================================
+
+.. currentmodule:: scikits.umfpack.umfpack
+
+.. automethod:: UmfpackContext.strInfo

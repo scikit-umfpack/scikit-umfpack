@@ -1,0 +1,6 @@
+scikits.umfpack.UmfpackLU.nnz
+=============================
+
+.. currentmodule:: scikits.umfpack
+
+.. autoproperty:: UmfpackLU.nnz

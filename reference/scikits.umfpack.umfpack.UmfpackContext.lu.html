@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>scikits.umfpack.umfpack.UmfpackContext.lu &#8212; scikits.umfpack 0.4.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/nature.css?v=279e0f84" />
+    <script src="../_static/documentation_options.js?v=ff822928"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="scikits.umfpack.umfpack.UmfpackContext.numeric" href="scikits.umfpack.umfpack.UmfpackContext.numeric.html" />
+    <link rel="prev" title="scikits.umfpack.umfpack.UmfpackContext.linsolve" href="scikits.umfpack.umfpack.UmfpackContext.linsolve.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="scikits.umfpack.umfpack.UmfpackContext.numeric.html" title="scikits.umfpack.umfpack.UmfpackContext.numeric"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="scikits.umfpack.umfpack.UmfpackContext.linsolve.html" title="scikits.umfpack.umfpack.UmfpackContext.linsolve"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">scikits.umfpack 0.4.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../umfpack.html" >Low-level interface to UMFPACK</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="scikits.umfpack.umfpack.UmfpackContext.html" accesskey="U">scikits.umfpack.umfpack.UmfpackContext</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">scikits.umfpack.umfpack.UmfpackContext.lu</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <section id="scikits-umfpack-umfpack-umfpackcontext-lu">
+<h1>scikits.umfpack.umfpack.UmfpackContext.lu<a class="headerlink" href="#scikits-umfpack-umfpack-umfpackcontext-lu" title="Link to this heading">¶</a></h1>
+<dl class="py method">
+<dt class="sig sig-object py" id="scikits.umfpack.umfpack.UmfpackContext.lu">
+<span class="sig-prename descclassname"><span class="pre">UmfpackContext.</span></span><span class="sig-name descname"><span class="pre">lu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mtx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scikits.umfpack.umfpack.UmfpackContext.lu" title="Link to this definition">¶</a></dt>
+<dd><p>Perform LU decomposition.</p>
+<p>For a given matrix A, the decomposition satisfies:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LU</span> <span class="o">=</span> <span class="n">PRAQ</span>        <span class="n">when</span> <span class="n">do_recip</span> <span class="ow">is</span> <span class="n">true</span>
+<span class="n">LU</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="n">R</span><span class="o">^-</span><span class="mi">1</span><span class="p">)</span><span class="n">AQ</span>   <span class="n">when</span> <span class="n">do_recip</span> <span class="ow">is</span> <span class="n">false</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>mtx</strong><span class="classifier">scipy.sparse.csc_matrix or scipy.sparse.csr_matrix</span></dt><dd><p>Input.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>L</strong><span class="classifier">csr_matrix</span></dt><dd><p>Lower triangular m-by-min(m,n) CSR matrix</p>
+</dd>
+<dt><strong>U</strong><span class="classifier">csc_matrix</span></dt><dd><p>Upper triangular min(m,n)-by-n CSC matrix</p>
+</dd>
+<dt><strong>P</strong><span class="classifier">ndarray</span></dt><dd><p>Vector of row permutations</p>
+</dd>
+<dt><strong>Q</strong><span class="classifier">ndarray</span></dt><dd><p>Vector of column permutations</p>
+</dd>
+<dt><strong>R</strong><span class="classifier">ndarray</span></dt><dd><p>Vector of diagonal row scalings</p>
+</dd>
+<dt><strong>do_recip</strong><span class="classifier">bool</span></dt><dd><p>Whether R is R^-1 or R</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="scikits.umfpack.umfpack.UmfpackContext.numeric.html" title="scikits.umfpack.umfpack.UmfpackContext.numeric"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="scikits.umfpack.umfpack.UmfpackContext.linsolve.html" title="scikits.umfpack.umfpack.UmfpackContext.linsolve"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">scikits.umfpack 0.4.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../umfpack.html" >Low-level interface to UMFPACK</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="scikits.umfpack.umfpack.UmfpackContext.html" >scikits.umfpack.umfpack.UmfpackContext</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">scikits.umfpack.umfpack.UmfpackContext.lu</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2017, scikit-umfack developers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+  </body>
+</html>

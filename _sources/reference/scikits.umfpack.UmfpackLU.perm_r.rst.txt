@@ -1,0 +1,6 @@
+scikits.umfpack.UmfpackLU.perm\_r
+=================================
+
+.. currentmodule:: scikits.umfpack
+
+.. autoproperty:: UmfpackLU.perm_r

@@ -1,0 +1,6 @@
+scikits.umfpack.UmfpackLU.L
+===========================
+
+.. currentmodule:: scikits.umfpack
+
+.. autoproperty:: UmfpackLU.L

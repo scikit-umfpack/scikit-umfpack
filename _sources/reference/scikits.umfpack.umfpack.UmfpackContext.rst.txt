@@ -1,0 +1,33 @@
+﻿scikits.umfpack.umfpack.UmfpackContext
+======================================
+
+.. currentmodule:: scikits.umfpack.umfpack
+
+.. autoclass:: UmfpackContext
+
+   
+
+   .. HACK -- the point here is that we don't want this to appear in the output, but the autosummary should still generate the pages.
+      .. autosummary::
+         :toctree:
+      
+         UmfpackContext.__call__
+         UmfpackContext.free
+         UmfpackContext.free_numeric
+         UmfpackContext.free_symbolic
+         UmfpackContext.linsolve
+         UmfpackContext.lu
+         UmfpackContext.numeric
+         UmfpackContext.report_control
+         UmfpackContext.report_info
+         UmfpackContext.report_numeric
+         UmfpackContext.report_symbolic
+         UmfpackContext.solve
+         UmfpackContext.strControl
+         UmfpackContext.strInfo
+         UmfpackContext.symbolic
+
+
+
+   
+

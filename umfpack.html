@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Low-level interface to UMFPACK &#8212; scikits.umfpack 0.4.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css?v=279e0f84" />
+    <script src="_static/documentation_options.js?v=ff822928"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="scikits.umfpack.umfpack.UmfpackContext" href="reference/scikits.umfpack.umfpack.UmfpackContext.html" />
+    <link rel="prev" title="scikits.umfpack.UmfpackLU.solve_sparse" href="reference/scikits.umfpack.UmfpackLU.solve_sparse.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="reference/scikits.umfpack.umfpack.UmfpackContext.html" title="scikits.umfpack.umfpack.UmfpackContext"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="reference/scikits.umfpack.UmfpackLU.solve_sparse.html" title="scikits.umfpack.UmfpackLU.solve_sparse"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">scikits.umfpack 0.4.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Low-level interface to UMFPACK</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <section id="low-level-interface-to-umfpack">
+<span id="module-scikits.umfpack.umfpack"></span><h1>Low-level interface to UMFPACK<a class="headerlink" href="#low-level-interface-to-umfpack" title="Link to this heading">¶</a></h1>
+<p>Routines for symbolic and numeric LU factorization of sparse
+matrices and for solving systems of linear equations with sparse matrices.</p>
+<p>Tested with UMFPACK V4.4 (Jan. 28, 2005), V5.0 (May 5, 2006)
+Copyright (c) 2005 by Timothy A. Davis.  All Rights Reserved.
+UMFPACK homepage: <a class="reference external" href="http://www.cise.ufl.edu/research/sparse/umfpack">http://www.cise.ufl.edu/research/sparse/umfpack</a></p>
+<p>Use ‘print UmfpackContext().funs’ to see all UMFPACK library functions the
+module exposes, if you need something not covered by the examples below.</p>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>[1] T. A. Davis, Algorithm 832:  UMFPACK - an unsymmetric-pattern</dt><dd><p>multifrontal method with a column pre-ordering strategy, ACM Trans. on
+Mathematical Software, 30(2), 2004, pp. 196–199.
+<a class="reference external" href="https://dl.acm.org/doi/abs/10.1145/992200.992206">https://dl.acm.org/doi/abs/10.1145/992200.992206</a></p>
+</dd>
+<dt>[2] P. Amestoy, T. A. Davis, and I. S. Duff, Algorithm 837: An approximate</dt><dd><p>minimum degree ordering algorithm, ACM Trans. on Mathematical Software,
+30(3), 2004, pp. 381–388.
+<a class="reference external" href="https://dl.acm.org/doi/abs/10.1145/1024074.1024081">https://dl.acm.org/doi/abs/10.1145/1024074.1024081</a></p>
+</dd>
+<dt>[3] T. A. Davis, J. R. Gilbert, S. Larimore, E. Ng, Algorithm 836:  COLAMD,</dt><dd><p>an approximate column minimum degree ordering algorithm, ACM Trans. on
+Mathematical Software, 30(3), 2004, pp. 377–380.
+<a class="reference external" href="https://doi.org/10.1145/1024074.1024080">https://doi.org/10.1145/1024074.1024080</a></p>
+</dd>
+</dl>
+</section>
+<section id="module-contents">
+<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="reference/scikits.umfpack.umfpack.UmfpackContext.html#scikits.umfpack.umfpack.UmfpackContext" title="scikits.umfpack.umfpack.UmfpackContext"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UmfpackContext</span></code></a>([family])</p></td>
+<td><p>UMFPACK solver context</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p>Assuming:</p>
+<ul class="simple">
+<li><p>Sparse matrix in CSR or CSC format: mtx</p></li>
+<li><p>Right hand side: rhs</p></li>
+<li><p>Solution: sol</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">scikits.umfpack</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">um</span>
+
+<span class="c1"># Contruct the solver.</span>
+<span class="n">umfpack</span> <span class="o">=</span> <span class="n">um</span><span class="o">.</span><span class="n">UmfpackContext</span><span class="p">()</span> <span class="c1"># Use default &#39;di&#39; family of UMFPACK routines.</span>
+
+<span class="c1"># One-shot solution.</span>
+<span class="n">sol</span> <span class="o">=</span> <span class="n">umfpack</span><span class="p">(</span> <span class="n">um</span><span class="o">.</span><span class="n">UMFPACK_A</span><span class="p">,</span> <span class="n">mtx</span><span class="p">,</span> <span class="n">rhs</span><span class="p">,</span> <span class="n">autoTranspose</span> <span class="o">=</span> <span class="kc">True</span> <span class="p">)</span>
+<span class="c1"># same as:</span>
+<span class="n">sol</span> <span class="o">=</span> <span class="n">umfpack</span><span class="o">.</span><span class="n">linsolve</span><span class="p">(</span> <span class="n">um</span><span class="o">.</span><span class="n">UMFPACK_A</span><span class="p">,</span> <span class="n">mtx</span><span class="p">,</span> <span class="n">rhs</span><span class="p">,</span> <span class="n">autoTranspose</span> <span class="o">=</span> <span class="kc">True</span> <span class="p">)</span>
+</pre></div>
+</div>
+<p>-or-</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make LU decomposition.</span>
+<span class="n">umfpack</span><span class="o">.</span><span class="n">numeric</span><span class="p">(</span> <span class="n">mtx</span> <span class="p">)</span>
+<span class="o">...</span>
+<span class="c1"># Use already LU-decomposed matrix.</span>
+<span class="n">sol1</span> <span class="o">=</span> <span class="n">umfpack</span><span class="p">(</span> <span class="n">um</span><span class="o">.</span><span class="n">UMFPACK_A</span><span class="p">,</span> <span class="n">mtx</span><span class="p">,</span> <span class="n">rhs1</span><span class="p">,</span> <span class="n">autoTranspose</span> <span class="o">=</span> <span class="kc">True</span> <span class="p">)</span>
+<span class="n">sol2</span> <span class="o">=</span> <span class="n">umfpack</span><span class="p">(</span> <span class="n">um</span><span class="o">.</span><span class="n">UMFPACK_A</span><span class="p">,</span> <span class="n">mtx</span><span class="p">,</span> <span class="n">rhs2</span><span class="p">,</span> <span class="n">autoTranspose</span> <span class="o">=</span> <span class="kc">True</span> <span class="p">)</span>
+<span class="c1"># same as:</span>
+<span class="n">sol1</span> <span class="o">=</span> <span class="n">umfpack</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span> <span class="n">um</span><span class="o">.</span><span class="n">UMFPACK_A</span><span class="p">,</span> <span class="n">mtx</span><span class="p">,</span> <span class="n">rhs1</span><span class="p">,</span> <span class="n">autoTranspose</span> <span class="o">=</span> <span class="kc">True</span> <span class="p">)</span>
+<span class="n">sol2</span> <span class="o">=</span> <span class="n">umfpack</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span> <span class="n">um</span><span class="o">.</span><span class="n">UMFPACK_A</span><span class="p">,</span> <span class="n">mtx</span><span class="p">,</span> <span class="n">rhs2</span><span class="p">,</span> <span class="n">autoTranspose</span> <span class="o">=</span> <span class="kc">True</span> <span class="p">)</span>
+</pre></div>
+</div>
+<p>-or-</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make symbolic decomposition.</span>
+<span class="n">umfpack</span><span class="o">.</span><span class="n">symbolic</span><span class="p">(</span> <span class="n">mtx0</span> <span class="p">)</span>
+<span class="c1"># Print statistics.</span>
+<span class="n">umfpack</span><span class="o">.</span><span class="n">report_symbolic</span><span class="p">()</span>
+
+<span class="c1"># ...</span>
+
+<span class="c1"># Make LU decomposition of mtx1 which has same structure as mtx0.</span>
+<span class="n">umfpack</span><span class="o">.</span><span class="n">numeric</span><span class="p">(</span> <span class="n">mtx1</span> <span class="p">)</span>
+<span class="c1"># Print statistics.</span>
+<span class="n">umfpack</span><span class="o">.</span><span class="n">report_numeric</span><span class="p">()</span>
+
+<span class="c1"># Use already LU-decomposed matrix.</span>
+<span class="n">sol1</span> <span class="o">=</span> <span class="n">umfpack</span><span class="p">(</span> <span class="n">um</span><span class="o">.</span><span class="n">UMFPACK_A</span><span class="p">,</span> <span class="n">mtx1</span><span class="p">,</span> <span class="n">rhs1</span><span class="p">,</span> <span class="n">autoTranspose</span> <span class="o">=</span> <span class="kc">True</span> <span class="p">)</span>
+
+<span class="c1"># ...</span>
+
+<span class="c1"># Make LU decomposition of mtx2 which has same structure as mtx0.</span>
+<span class="n">umfpack</span><span class="o">.</span><span class="n">numeric</span><span class="p">(</span> <span class="n">mtx2</span> <span class="p">)</span>
+<span class="n">sol2</span> <span class="o">=</span> <span class="n">umfpack</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span> <span class="n">um</span><span class="o">.</span><span class="n">UMFPACK_A</span><span class="p">,</span> <span class="n">mtx2</span><span class="p">,</span> <span class="n">rhs2</span><span class="p">,</span> <span class="n">autoTranspose</span> <span class="o">=</span> <span class="kc">True</span> <span class="p">)</span>
+
+<span class="c1"># Print all statistics.</span>
+<span class="n">umfpack</span><span class="o">.</span><span class="n">report_info</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>-or-</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get LU factors and permutation matrices of a matrix.</span>
+<span class="n">L</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">do_recip</span> <span class="o">=</span> <span class="n">umfpack</span><span class="o">.</span><span class="n">lu</span><span class="p">(</span> <span class="n">mtx</span> <span class="p">)</span>
+</pre></div>
+</div>
+<p>For a given matrix A, the decomposition satisfies:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LU</span> <span class="o">=</span> <span class="n">PRAQ</span>           <span class="n">when</span> <span class="n">do_recip</span> <span class="ow">is</span> <span class="n">true</span><span class="p">,</span>
+<span class="n">LU</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="n">R</span><span class="o">^</span><span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">})</span><span class="n">AQ</span>    <span class="n">when</span> <span class="n">do_recip</span> <span class="ow">is</span> <span class="n">false</span>
+</pre></div>
+</div>
+</section>
+<section id="setting-control-parameters">
+<h2>Setting control parameters<a class="headerlink" href="#setting-control-parameters" title="Link to this heading">¶</a></h2>
+<p>List of control parameter names is accessible as ‘um.umfControls’ - their
+meaning and possible values are described in the UMFPACK documentation.
+To each name corresponds an attribute of the ‘um’ module, such as,
+for example ‘um.UMFPACK_PRL’ (controlling the verbosity of umfpack report
+functions).  These attributes are in fact indices into the control array
+- to set the corresponding control array value, just do the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">umfpack</span> <span class="o">=</span> <span class="n">um</span><span class="o">.</span><span class="n">UmfpackContext</span><span class="p">()</span>
+<span class="n">umfpack</span><span class="o">.</span><span class="n">control</span><span class="p">[</span><span class="n">um</span><span class="o">.</span><span class="n">UMFPACK_PRL</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span> <span class="c1"># Let&#39;s be more verbose.</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="reference/scikits.umfpack.umfpack.UmfpackContext.html" title="scikits.umfpack.umfpack.UmfpackContext"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="reference/scikits.umfpack.UmfpackLU.solve_sparse.html" title="scikits.umfpack.UmfpackLU.solve_sparse"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">scikits.umfpack 0.4.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Low-level interface to UMFPACK</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2017, scikit-umfack developers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+  </body>
+</html>

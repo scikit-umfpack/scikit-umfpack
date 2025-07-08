@@ -1,0 +1,6 @@
+scikits.umfpack.UmfpackLU.solve\_sparse
+=======================================
+
+.. currentmodule:: scikits.umfpack
+
+.. automethod:: UmfpackLU.solve_sparse

@@ -1,0 +1,6 @@
+scikits.umfpack.UmfpackLU.shape
+===============================
+
+.. currentmodule:: scikits.umfpack
+
+.. autoproperty:: UmfpackLU.shape

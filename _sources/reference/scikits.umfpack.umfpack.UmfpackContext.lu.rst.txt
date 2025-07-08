@@ -1,0 +1,6 @@
+scikits.umfpack.umfpack.UmfpackContext.lu
+=========================================
+
+.. currentmodule:: scikits.umfpack.umfpack
+
+.. automethod:: UmfpackContext.lu

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Release Tasks &#8212; scikits.umfpack 0.4.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css?v=279e0f84" />
+    <script src="_static/documentation_options.js?v=ff822928"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Development" href="develop.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="develop.html" title="Development"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">scikits.umfpack 0.4.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Release Tasks</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <section id="release-tasks">
+<h1>Release Tasks<a class="headerlink" href="#release-tasks" title="Link to this heading">¶</a></h1>
+<ol class="arabic">
+<li><p>Setup <a class="reference external" href="https://pypi.python.org/pypi">pypi</a> and <a class="reference external" href="https://testpypi.python.org/pypi">testpypi</a> accounts if you do not already have ones. Then
+put the following into your <code class="docutils literal notranslate"><span class="pre">~/.pypirc</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">distutils</span><span class="p">]</span>
+    <span class="n">pypi</span>
+    <span class="n">testpypi</span>
+
+<span class="p">[</span><span class="n">pypi</span><span class="p">]</span>
+<span class="n">username</span> <span class="o">=</span> <span class="n">your_pypi_name</span>
+<span class="n">password</span> <span class="o">=</span> <span class="n">your_pypi_password</span>
+
+<span class="p">[</span><span class="n">testpypi</span><span class="p">]</span>
+<span class="n">repository</span> <span class="o">=</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">test</span><span class="o">.</span><span class="n">pypi</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">legacy</span><span class="o">/</span>
+<span class="n">username</span> <span class="o">=</span> <span class="n">your_testpypi_name</span>
+<span class="n">password</span> <span class="o">=</span> <span class="n">your_testpypi_password</span>
+</pre></div>
+</div>
+<p>Then register your accounts:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># testpypi</span>
+<span class="n">python3</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">register</span> <span class="o">-</span><span class="n">r</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">testpypi</span><span class="o">.</span><span class="n">python</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">pypi</span>
+
+<span class="c1"># pypi</span>
+<span class="n">python3</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">register</span>
+</pre></div>
+</div>
+<p>To be able to upload to pypi/testpypi without sending your password in plain
+text, install <a class="reference external" href="https://pypi.python.org/pypi/twine">twine</a>. An upload is then done simply by:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># testpypi</span>
+<span class="n">twine</span> <span class="n">upload</span> <span class="o">-</span><span class="n">r</span> <span class="n">testpypi</span> <span class="o">&lt;</span><span class="n">filenames</span><span class="o">&gt;</span>
+
+<span class="c1"># pypi</span>
+<span class="n">twine</span> <span class="n">upload</span> <span class="o">&lt;</span><span class="n">filenames</span><span class="o">&gt;</span> <span class="c1"># Be careful!</span>
+</pre></div>
+</div>
+<p><strong>WARNING:</strong> Uploads to <a class="reference external" href="https://pypi.python.org/pypi">pypi</a> are permanent and cannot be updated later! If
+a wrong file is uploaded, the only fix is to create a new release. Always
+use <a class="reference external" href="https://testpypi.python.org/pypi">testpypi</a> first.</p>
+</li>
+<li><p>Bump version number:</p>
+<ul class="simple">
+<li><p>in <code class="docutils literal notranslate"><span class="pre">meson.build</span></code></p></li>
+<li><p>in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code></p></li>
+<li><p>in <code class="docutils literal notranslate"><span class="pre">docs/conf.py</span></code></p></li>
+</ul>
+</li>
+<li><p>Regenerate and review the documentation (the editable install prevents a
+circular import error):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">build</span><span class="o">-</span><span class="n">isolation</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
+<span class="n">cd</span> <span class="n">docs</span> <span class="o">&amp;&amp;</span> <span class="n">make</span> <span class="n">html</span> <span class="o">&amp;&amp;</span> <span class="n">cd</span> <span class="o">..</span>
+<span class="n">firefox</span> <span class="n">docs</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">index</span><span class="o">.</span><span class="n">html</span>
+</pre></div>
+</div>
+</li>
+<li><p>Install and test the git version that is to be released. In the git
+repository, do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">.</span>
+<span class="n">cd</span> <span class="n">docs</span>
+<span class="n">pytest</span> <span class="o">--</span><span class="n">pyargs</span> <span class="n">scikits</span><span class="o">.</span><span class="n">umfpack</span>
+<span class="n">cd</span> <span class="o">..</span>
+</pre></div>
+</div>
+</li>
+<li><p>The version changes need to be committed to reflect in this step.
+Create a source distribution tarball, install it and test it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">build</span>
+<span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">build</span>
+</pre></div>
+</div>
+<p>Unpack the source tarball, cd to it, and repeat the previous step.</p>
+</li>
+<li><p>If OK, merge the version branch.</p></li>
+<li><p>Upload to <a class="reference external" href="https://testpypi.python.org/pypi">testpypi</a> and test:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">build</span>
+<span class="n">twine</span> <span class="n">upload</span> <span class="o">-</span><span class="n">r</span> <span class="n">testpypi</span> <span class="n">dist</span><span class="o">/</span><span class="n">scikit_umfpack</span><span class="o">-&lt;</span><span class="n">version</span><span class="o">&gt;.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+</pre></div>
+</div>
+<p>Note: if the upload fails with <cite>This filename has previously been used, you
+should use a different version.</cite>, just change the version (see step 2)
+to another value.</p>
+<p>Create a test install using <a class="reference external" href="https://docs.python.org/3/library/venv.html">venv</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">venv</span> <span class="n">venv</span>
+<span class="n">source</span> <span class="n">venv</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
+
+<span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">U</span> <span class="o">-</span><span class="n">i</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">test</span><span class="o">.</span><span class="n">pypi</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">simple</span><span class="o">/</span> <span class="o">--</span><span class="n">extra</span><span class="o">-</span><span class="n">index</span><span class="o">-</span><span class="n">url</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">pypi</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">simple</span><span class="o">/</span> <span class="o">--</span><span class="n">pre</span> <span class="n">scikit</span><span class="o">-</span><span class="n">umfpack</span>
+
+<span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pytest</span>
+<span class="n">pytest</span> <span class="o">--</span><span class="n">pyargs</span> <span class="n">scikits</span><span class="o">.</span><span class="n">umfpack</span>
+
+<span class="n">deactivate</span>
+</pre></div>
+</div>
+</li>
+<li><p>If OK, tag the version in git &amp; push to github.</p></li>
+<li><p>Upload to <a class="reference external" href="https://pypi.python.org/pypi">pypi</a>:</p>
+<ul>
+<li><p>Check the version numbers (see step 2).</p></li>
+<li><p>Do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">build</span>
+<span class="n">twine</span> <span class="n">upload</span> <span class="n">dist</span><span class="o">/</span><span class="n">scikit_umfpack</span><span class="o">-&lt;</span><span class="n">version</span><span class="o">&gt;.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+</pre></div>
+</div>
+</li>
+<li><p>Test:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">venv</span> <span class="n">venv</span>
+<span class="n">source</span> <span class="n">venv</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
+
+<span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">U</span> <span class="n">scikit</span><span class="o">-</span><span class="n">umfpack</span>
+
+<span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pytest</span>
+<span class="n">pytest</span> <span class="o">--</span><span class="n">pyargs</span> <span class="n">scikits</span><span class="o">.</span><span class="n">umfpack</span>
+
+<span class="n">deactivate</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p>Update gh-pages:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">build</span><span class="o">-</span><span class="n">isolation</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
+<span class="o">./</span><span class="n">docs</span><span class="o">/</span><span class="n">do</span><span class="o">-</span><span class="n">gh</span><span class="o">-</span><span class="n">pages</span><span class="o">.</span><span class="n">sh</span>
+<span class="n">git</span> <span class="n">push</span> <span class="o">-</span><span class="n">f</span> <span class="n">origin</span> <span class="n">gh</span><span class="o">-</span><span class="n">pages</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="develop.html" title="Development"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">scikits.umfpack 0.4.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Release Tasks</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2017, scikit-umfack developers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+  </body>
+</html>

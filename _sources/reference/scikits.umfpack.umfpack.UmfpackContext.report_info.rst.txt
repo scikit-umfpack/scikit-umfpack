@@ -1,0 +1,6 @@
+scikits.umfpack.umfpack.UmfpackContext.report\_info
+===================================================
+
+.. currentmodule:: scikits.umfpack.umfpack
+
+.. automethod:: UmfpackContext.report_info

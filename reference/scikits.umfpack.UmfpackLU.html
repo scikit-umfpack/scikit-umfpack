@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>scikits.umfpack.UmfpackLU &#8212; scikits.umfpack 0.4.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/nature.css?v=279e0f84" />
+    <script src="../_static/documentation_options.js?v=ff822928"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="scikits.umfpack.UmfpackLU.solve" href="scikits.umfpack.UmfpackLU.solve.html" />
+    <link rel="prev" title="scikits.umfpack.splu" href="scikits.umfpack.splu.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="scikits.umfpack.UmfpackLU.solve.html" title="scikits.umfpack.UmfpackLU.solve"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="scikits.umfpack.splu.html" title="scikits.umfpack.splu"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">scikits.umfpack 0.4.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../interface.html" accesskey="U">Easy-to-use UMFPACK interface</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">scikits.umfpack.UmfpackLU</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <section id="scikits-umfpack-umfpacklu">
+<h1>scikits.umfpack.UmfpackLU<a class="headerlink" href="#scikits-umfpack-umfpacklu" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="scikits.umfpack.UmfpackLU">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scikits.umfpack.</span></span><span class="sig-name descname"><span class="pre">UmfpackLU</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scikits.umfpack.UmfpackLU" title="Link to this definition">¶</a></dt>
+<dd><p>LU factorization of a sparse matrix.</p>
+<p>Factorization is represented as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Pr</span> <span class="o">*</span> <span class="p">(</span><span class="n">R</span><span class="o">^-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">A</span> <span class="o">*</span> <span class="n">Pc</span> <span class="o">=</span> <span class="n">L</span> <span class="o">*</span> <span class="n">U</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>A</strong><span class="classifier">csc_matrix or csr_matrix</span></dt><dd><p>Matrix to decompose</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><a class="reference internal" href="scikits.umfpack.UmfpackLU.shape.html#scikits.umfpack.UmfpackLU.shape" title="scikits.umfpack.UmfpackLU.shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shape</span></code></a></dt><dd><p>Shape of the original matrix as a tuple of ints.</p>
+</dd>
+<dt><a class="reference internal" href="scikits.umfpack.UmfpackLU.nnz.html#scikits.umfpack.UmfpackLU.nnz" title="scikits.umfpack.UmfpackLU.nnz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nnz</span></code></a></dt><dd><p>Combined number of nonzeros in L and U: L.nnz + U.nnz</p>
+</dd>
+<dt><a class="reference internal" href="scikits.umfpack.UmfpackLU.perm_c.html#scikits.umfpack.UmfpackLU.perm_c" title="scikits.umfpack.UmfpackLU.perm_c"><code class="xref py py-obj docutils literal notranslate"><span class="pre">perm_c</span></code></a></dt><dd><p>Permutation Pc represented as an array of indices.</p>
+</dd>
+<dt><a class="reference internal" href="scikits.umfpack.UmfpackLU.perm_r.html#scikits.umfpack.UmfpackLU.perm_r" title="scikits.umfpack.UmfpackLU.perm_r"><code class="xref py py-obj docutils literal notranslate"><span class="pre">perm_r</span></code></a></dt><dd><p>Permutation Pr represented as an array of indices.</p>
+</dd>
+<dt><a class="reference internal" href="scikits.umfpack.UmfpackLU.L.html#scikits.umfpack.UmfpackLU.L" title="scikits.umfpack.UmfpackLU.L"><code class="xref py py-obj docutils literal notranslate"><span class="pre">L</span></code></a></dt><dd><p>Lower triangular factor with unit diagonal as a <cite>scipy.sparse.csc_matrix</cite>.</p>
+</dd>
+<dt><a class="reference internal" href="scikits.umfpack.UmfpackLU.U.html#scikits.umfpack.UmfpackLU.U" title="scikits.umfpack.UmfpackLU.U"><code class="xref py py-obj docutils literal notranslate"><span class="pre">U</span></code></a></dt><dd><p>Upper triangular factor as a <cite>scipy.sparse.csc_matrix</cite>.</p>
+</dd>
+<dt><a class="reference internal" href="scikits.umfpack.UmfpackLU.R.html#scikits.umfpack.UmfpackLU.R" title="scikits.umfpack.UmfpackLU.R"><code class="xref py py-obj docutils literal notranslate"><span class="pre">R</span></code></a></dt><dd><p>Row scaling factors, as a 1D array.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="scikits.umfpack.UmfpackLU.solve.html#scikits.umfpack.UmfpackLU.solve" title="scikits.umfpack.UmfpackLU.solve"><code class="xref py py-obj docutils literal notranslate"><span class="pre">solve</span></code></a>(b)</p></td>
+<td><p>Solve linear equation A x = b for x</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="scikits.umfpack.UmfpackLU.solve_sparse.html#scikits.umfpack.UmfpackLU.solve_sparse" title="scikits.umfpack.UmfpackLU.solve_sparse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">solve_sparse</span></code></a>(B)</p></td>
+<td><p>Solve linear equation of the form A X = B.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>The LU decomposition can be used to solve matrix equations. Consider:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">scipy.sparse</span><span class="w"> </span><span class="kn">import</span> <span class="n">csc_matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">scikits</span><span class="w"> </span><span class="kn">import</span> <span class="n">umfpack</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">csc_matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.</span><span class="p">]])</span>
+</pre></div>
+</div>
+<p>This can be solved for a given right-hand side:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lu</span> <span class="o">=</span> <span class="n">umfpack</span><span class="o">.</span><span class="n">splu</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">lu</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">array([ 1.,  2.,  3.,  4.])</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">lu</span></code> object also contains an explicit representation of the
+decomposition. The permutations are represented as mappings of
+indices:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lu</span><span class="o">.</span><span class="n">perm_r</span>
+<span class="go">array([0, 2, 1, 3], dtype=int32)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lu</span><span class="o">.</span><span class="n">perm_c</span>
+<span class="go">array([2, 0, 1, 3], dtype=int32)</span>
+</pre></div>
+</div>
+<p>The L and U factors are sparse matrices in CSC format:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lu</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+<span class="go">array([[ 1. ,  0. ,  0. ,  0. ],</span>
+<span class="go">       [ 0. ,  1. ,  0. ,  0. ],</span>
+<span class="go">       [ 0. ,  0. ,  1. ,  0. ],</span>
+<span class="go">       [ 1. ,  0.5,  0.5,  1. ]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lu</span><span class="o">.</span><span class="n">U</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+<span class="go">array([[ 2.,  0.,  1.,  4.],</span>
+<span class="go">       [ 0.,  2.,  1.,  1.],</span>
+<span class="go">       [ 0.,  0.,  1.,  1.],</span>
+<span class="go">       [ 0.,  0.,  0., -5.]])</span>
+</pre></div>
+</div>
+<p>The permutation matrices can be constructed:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Pr</span> <span class="o">=</span> <span class="n">csc_matrix</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Pr</span><span class="p">[</span><span class="n">lu</span><span class="o">.</span><span class="n">perm_r</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Pc</span> <span class="o">=</span> <span class="n">csc_matrix</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Pc</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="n">lu</span><span class="o">.</span><span class="n">perm_c</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>Similarly for the row scalings:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">R</span> <span class="o">=</span> <span class="n">csc_matrix</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">R</span><span class="o">.</span><span class="n">setdiag</span><span class="p">(</span><span class="n">lu</span><span class="o">.</span><span class="n">R</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can reassemble the original matrix:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">R</span> <span class="o">*</span> <span class="n">Pr</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="p">(</span><span class="n">lu</span><span class="o">.</span><span class="n">L</span> <span class="o">*</span> <span class="n">lu</span><span class="o">.</span><span class="n">U</span><span class="p">)</span> <span class="o">*</span> <span class="n">Pc</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+<span class="go">array([[ 1.,  2.,  0.,  4.],</span>
+<span class="go">       [ 1.,  0.,  0.,  1.],</span>
+<span class="go">       [ 1.,  0.,  2.,  1.],</span>
+<span class="go">       [ 2.,  2.,  1.,  0.]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="scikits.umfpack.UmfpackLU.solve.html" title="scikits.umfpack.UmfpackLU.solve"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="scikits.umfpack.splu.html" title="scikits.umfpack.splu"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">scikits.umfpack 0.4.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../interface.html" >Easy-to-use UMFPACK interface</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">scikits.umfpack.UmfpackLU</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2017, scikit-umfack developers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+scikits.umfpack.umfpack.UmfpackContext.strControl
+=================================================
+
+.. currentmodule:: scikits.umfpack.umfpack
+
+.. automethod:: UmfpackContext.strControl

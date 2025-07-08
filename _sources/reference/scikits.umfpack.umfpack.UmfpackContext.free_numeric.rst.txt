@@ -1,0 +1,6 @@
+scikits.umfpack.umfpack.UmfpackContext.free\_numeric
+====================================================
+
+.. currentmodule:: scikits.umfpack.umfpack
+
+.. automethod:: UmfpackContext.free_numeric

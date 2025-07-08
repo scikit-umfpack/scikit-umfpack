@@ -1,0 +1,6 @@
+scikits.umfpack.umfpack.UmfpackContext.free\_symbolic
+=====================================================
+
+.. currentmodule:: scikits.umfpack.umfpack
+
+.. automethod:: UmfpackContext.free_symbolic

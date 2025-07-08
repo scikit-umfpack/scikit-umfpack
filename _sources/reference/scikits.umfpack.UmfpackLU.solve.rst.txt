@@ -1,0 +1,6 @@
+scikits.umfpack.UmfpackLU.solve
+===============================
+
+.. currentmodule:: scikits.umfpack
+
+.. automethod:: UmfpackLU.solve
