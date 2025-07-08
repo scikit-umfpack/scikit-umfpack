@@ -46,8 +46,10 @@ Release Tasks
    - in ``pyproject.toml``
    - in ``docs/conf.py``
 
-#. Regenerate and review the documentation::
+#. Regenerate and review the documentation (the editable install prevents a
+   circular import error)::
 
+     pip install --no-build-isolation -e .
      cd docs && make html && cd ..
      firefox docs/_build/html/index.html
 
@@ -59,7 +61,8 @@ Release Tasks
      pytest --pyargs scikits.umfpack
      cd ..
 
-#. Create a source distribution tarball, install it and test it::
+#. The version changes need to be committed to reflect in this step.
+   Create a source distribution tarball, install it and test it::
 
      pip install build
      python3 -m build
